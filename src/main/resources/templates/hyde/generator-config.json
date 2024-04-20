@@ -1,0 +1,83 @@
+{
+  "actions": [
+    {
+      "actionType": "COPY_DIRECTORY",
+      "inputLocation": "templates/hyde",
+      "outputLocation": "out/generated-templates/%s"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt",
+      "outputLocation": "out/generated-templates/%s/_config.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/education-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/education.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/education-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/skills-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/skills.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/skills-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/workexperience-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/workexperience.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/workexperience-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/projects-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/projects.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/projects-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/index-template.txt",
+      "outputLocation": "out/generated-templates/%s/index.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/index-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/aboutme-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/aboutme.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/aboutme-template.txt"
+    },
+    {
+      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/files/resume.pdf"
+    },
+    {
+      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/images/avatar.jpg"
+    },
+    {
+      "actionType": "DEPLOY_STATIC_SITE"
+    }
+  ]
+}

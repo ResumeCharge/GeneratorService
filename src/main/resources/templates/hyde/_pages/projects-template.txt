@@ -1,0 +1,14 @@
+---
+layout: single
+title: Projects
+permalink: /projects/
+---
+[# th:if="${staticSiteRequestManager.resume.projectsList}"]
+[# th:each="project: ${staticSiteRequestManager.resume.projectsList}"]
+# [(${#strings.escapeJava(project.title)})]
+
+[(${project.details})]
+
+---
+[/]
+[/]

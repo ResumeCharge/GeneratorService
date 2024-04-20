@@ -1,0 +1,21 @@
+---
+layout: single
+title: Work Experience
+permalink: /workexperience/
+---
+[# th:if="${staticSiteRequestManager.resume.workExperienceList}"]
+[# th:each="workExperience: ${staticSiteRequestManager.resume.workExperienceList}"]
+# [(${#strings.escapeJava(workExperience.company)})] - [(${#strings.escapeJava(workExperience.roleName)})]
+
+
+[(${#strings.escapeJava(workExperience.location)})]
+
+
+[(${#strings.escapeJava(workExperience.startDate)})] - [(${#strings.escapeJava(workExperience.endDate)})]
+
+
+[(${workExperience.details})]
+
+---
+[/]
+[/]

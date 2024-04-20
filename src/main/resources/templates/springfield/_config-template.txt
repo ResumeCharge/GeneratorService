@@ -1,0 +1,58 @@
+# Site settings
+title: "[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.title)})]"
+description: "[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.description)})]"
+
+# Build settings
+markdown: kramdown
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Resume settings
+resume_avatar:                  [# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]"true"[/][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI == null}"]"false"[/]
+resume_name:                    "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})]"
+resume_title:                   "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.positionTitle)})]"
+
+# used for the contact button in _layouts/resume.html
+resume_contact_email:           "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.email)})]"
+
+# the next two items are used for schema itemprops in _layouts/resume.html
+resume_contact_telephone:       "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.phone)})]"
+resume_contact_address:         "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.location)})]"
+
+resume_header_contact_info:     "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.location)})] • [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.phone)})] • [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.email)})]"
+display_header_contact_info:     [# th:if="${staticSiteRequestManager.websiteDetails.extraConfigurationOptions['showContactInfo']}"]"true"[/]
+
+resume_header_intro: "[(${#strings.escapeJava(staticSiteRequestManager.resume.careerSummary.summary)})]"
+
+# use "yes" to display the email contact button,
+# "no" to display an "I'm not looking for work" message,
+# or remove the resume_looking_for_work option entirely
+# to leave blank
+resume_looking_for_work: [# th:if="${staticSiteRequestManager.websiteDetails.extraConfigurationOptions['lookingForWork']}"]"true"[/]
+
+# Decide which sections to use
+# comment out to hide
+resume_section_experience:      [# th:if="${staticSiteRequestManager.resume.workExperienceList}"]true[/][# th:unless="${staticSiteRequestManager.resume.workExperienceList}"]false[/]
+resume_section_education:       [# th:if="${staticSiteRequestManager.resume.educationList}"]true[/][# th:unless="${staticSiteRequestManager.resume.educationList}"]false[/]
+resume_section_projects:        [# th:if="${staticSiteRequestManager.resume.projectsList}"]true[/][# th:unless="${staticSiteRequestManager.resume.projectsList}"]false[/]
+resume_section_skills:          [# th:if="${staticSiteRequestManager.resume.skills}"]true[/][# th:unless="${staticSiteRequestManager.resume.skills}"]false[/]
+resume_section_recognition:     false
+resume_section_links:           [# th:if="${staticSiteRequestManager.resume.extraLinkList}"]true[/][# th:unless="${staticSiteRequestManager.resume.extraLinkList}"]false[/]
+resume_section_associations:    false
+resume_section_aboutme:       [# th:if="${staticSiteRequestManager.resume.awardsAndAccoladesList}"]true[/][# th:unless="${staticSiteRequestManager.resume.awardsAndAccoladesList}"]false[/]
+
+# Resume social links
+# uncomment the options you wish to display, and add your own URL
+resume_social_links:
+  resume_github_url:            "https://github.com/[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.github)})]"
+  resume_linkedin_url:          "https://www.linkedin.com/in/[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.linkedin)})]"
+  resume_website_url:           "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.website)})]"
+resume_print_social_links:      true
+
+# Design settings
+resume_theme:                   default
+
+# Note: when editing locally, remember to restart
+# your Jekyll server when you edit this file. Changes
+# to _config.yml are only recognized when the server starts

@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "actionType": "COPY_DIRECTORY",
+      "inputLocation": "templates/midgard",
+      "outputLocation": "out/generated-templates/%s"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt",
+      "outputLocation": "out/generated-templates/%s/_config.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/generator-config.json"
+    },
+    {
+      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/resume.pdf"
+    },
+    {
+      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/images/avatar.jpg"
+    },
+    {
+      "actionType": "DEPLOY_STATIC_SITE"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[# th:if="${staticSiteRequestManager.resume.workExperienceList}"]
+[# th:each="workExperience: ${staticSiteRequestManager.resume.workExperienceList}"]
+- company:  [(${#strings.escapeJava(workExperience.company)})] - [(${#strings.escapeJava(workExperience.location)})]
+  position: [(${#strings.escapeJava(workExperience.roleName)})]
+  duration: [(${#strings.escapeJava(workExperience.startDate)})] - [(${#strings.escapeJava(workExperience.endDate)})]
+  summary:  "[(${#strings.escapeJava(workExperience.details)})]"
+[/]
+[/]

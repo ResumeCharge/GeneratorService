@@ -1,0 +1,16 @@
+main:
+  [# th:if="${staticSiteRequestManager.resume.workExperienceList}"]- title: "Work Experience"
+    url: '/workexperience/'
+  [/]
+  [# th:if="${staticSiteRequestManager.resume.projectsList}"]- title: "Projects"
+    url: '/projects/'
+  [/]
+  [# th:if="${staticSiteRequestManager.resume.educationList}"]- title: "Education"
+    url: '/education/'
+  [/]
+  [# th:if="${staticSiteRequestManager.resume.skills}"]- title: "Skills"
+    url: '/skills/'
+  [/]
+  [# th:if="${staticSiteRequestManager.resume.aboutMe}"]- title: "About Me"
+    url: '/about/'
+  [/]

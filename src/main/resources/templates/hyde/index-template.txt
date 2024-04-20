@@ -1,0 +1,12 @@
+---
+layout: default
+title: Home
+---
+
+# My Personal Portfolio
+
+[(${staticSiteRequestManager.resume.careerSummary.summary})]
+[# th:if="${staticSiteRequestManager.websiteDetails.resumeS3URI}"]
+[Resume]({{ "/assets/files/resume.pdf" | relative_url }})
+[/]
+

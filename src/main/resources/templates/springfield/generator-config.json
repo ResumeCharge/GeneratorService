@@ -1,0 +1,92 @@
+{
+  "actions": [
+    {
+      "actionType": "COPY_DIRECTORY",
+      "inputLocation": "templates/springfield",
+      "outputLocation": "out/generated-templates/%s"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt",
+      "outputLocation": "out/generated-templates/%s/_config.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/education-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/education.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/education-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/experience-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/experience.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/experience-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/links-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/links.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/links-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/projects-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/projects.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/projects-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/recognitions-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/recognitions.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/recognitions-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/skills-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/skills.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/skills-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_data/aboutme-template.txt",
+      "outputLocation": "out/generated-templates/%s/_data/aboutme.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_data/aboutme-template.txt"
+    },
+    {
+      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/files/resume.pdf"
+    },
+    {
+      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/images/avatar.jpg"
+    },
+    {
+      "actionType": "DEPLOY_STATIC_SITE"
+    }
+  ]
+}

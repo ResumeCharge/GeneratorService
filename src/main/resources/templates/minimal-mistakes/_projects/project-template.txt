@@ -1,0 +1,7 @@
+---
+layout: single
+title: [(${#strings.escapeJava(PROJECT.title)})]
+permalink: /projects/[(${#strings.replace(PROJECT.title,' ','-')})]
+---
+
+[(${PROJECT.details})]

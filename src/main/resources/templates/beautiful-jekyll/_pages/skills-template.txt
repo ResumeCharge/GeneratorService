@@ -1,0 +1,8 @@
+---
+layout: page
+title: Skills
+permalink: /skills/
+classes:
+  - skills
+---
+[(${staticSiteRequestManager.resume.skills.skills})]

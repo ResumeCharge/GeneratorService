@@ -1,0 +1,10 @@
+---
+layout: page
+title: [(${#strings.escapeJava(WORK_EXPERIENCE.roleName)})] - [(${#strings.escapeJava(WORK_EXPERIENCE.company)})]
+permalink: /workexperience/[(${#strings.escapeJava(WORK_EXPERIENCE.roleName)})]-[(${#strings.escapeJava(WORK_EXPERIENCE.company)})]
+---
+### Date : [(${#strings.escapeJava(WORK_EXPERIENCE.startDate)})] - [(${#strings.escapeJava(WORK_EXPERIENCE.endDate)})]
+### Location : [(${#strings.escapeJava(WORK_EXPERIENCE.location)})]
+### Title : [(${#strings.escapeJava(WORK_EXPERIENCE.roleName)})]
+
+[(${WORK_EXPERIENCE.details})]

@@ -1,0 +1,8 @@
+[# th:if="${staticSiteRequestManager.resume.awardsAndAccoladesList}"]
+[# th:each="awardAccolade: ${staticSiteRequestManager.resume.awardsAndAccoladesList}"]
+- award: [(${#strings.escapeJava(awardAccolade.name)})]
+  organization: [(${#strings.escapeJava(awardAccolade.organization)})]
+  year:[# th:each="year: ${yearsObtained}"][(${#strings.escapeJava(year)})] [/]
+  summary: "[(${awardAccolade.description})]"
+[/]
+[/]

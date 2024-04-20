@@ -1,0 +1,6 @@
+---
+layout: single
+title: Skills
+permalink: /skills/
+---
+[# th:if="${staticSiteRequestManager.resume.skills}"][(${staticSiteRequestManager.resume.skills.skills})][/]

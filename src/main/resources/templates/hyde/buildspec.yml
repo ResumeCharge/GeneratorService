@@ -1,0 +1,14 @@
+version: 0.1
+
+phases:
+  install:
+    commands:
+      - gem install jekyll jekyll-gist jekyll-sitemap jekyll-seo-tag
+  build:
+    commands:
+      - jekyll build
+artifacts:
+  files:
+    - '**/*'
+  name: $STATIC_SITE_NAME
+  base-directory: _site

@@ -1,0 +1,136 @@
+{
+  "actions": [
+    {
+      "actionType": "COPY_DIRECTORY",
+      "inputLocation": "templates/beautiful-jekyll",
+      "outputLocation": "out/generated-templates/%s"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt",
+      "outputLocation": "out/generated-templates/%s/_config.yml"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_config-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/education-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/education.md",
+      "dataKey": "EDUCATION",
+      "options": [
+        {
+          "optionType": "REQUIRED",
+          "optionValue": "EDUCATION"
+        }
+      ]
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/education-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/skills-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/skills.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/skills-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/workexperience-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/workexperience.md",
+      "dataKey": "WORK_EXPERIENCE",
+      "options": [
+        {
+          "optionType": "REQUIRED",
+          "optionValue": "WORK_EXPERIENCE"
+        }
+      ]
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/workexperience-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/projects-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/projects.md",
+      "dataKey": "PROJECT",
+      "options": [
+        {
+          "optionType": "REQUIRED",
+          "optionValue": "PROJECT"
+        }
+      ]
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/projects-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE_FROM_ARRAY",
+      "inputLocation": "out/generated-templates/%s/_projects/project-template.txt",
+      "outputLocation": "out/generated-templates/%s/_projects/%s.md",
+      "dataKey": "PROJECT",
+      "options": [
+        {
+          "optionType": "REQUIRED",
+          "optionValue": "PROJECT"
+        }
+      ]
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_projects/project-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE_FROM_ARRAY",
+      "inputLocation": "out/generated-templates/%s/_workexperience/workexperience-template.txt",
+      "outputLocation": "out/generated-templates/%s/_workexperience/%s.md",
+      "dataKey": "WORK_EXPERIENCE",
+      "options": [
+        {
+          "optionType": "REQUIRED",
+          "optionValue": "WORK_EXPERIENCE"
+        }
+      ]
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_workexperience/workexperience-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/index-template.txt",
+      "outputLocation": "out/generated-templates/%s/index.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/index-template.txt"
+    },
+    {
+      "actionType": "PROCESS_TEMPLATE",
+      "inputLocation": "out/generated-templates/%s/_pages/aboutme-template.txt",
+      "outputLocation": "out/generated-templates/%s/_pages/aboutme.md"
+    },
+    {
+      "actionType": "DELETE_FILE",
+      "inputLocation": "out/generated-templates/%s/_pages/aboutme-template.txt"
+    },
+    {
+      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/files/resume.pdf"
+    },
+    {
+      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "outputLocation": "out/generated-templates/%s/assets/img/avatar.jpg"
+    },
+    {
+      "actionType": "DEPLOY_STATIC_SITE"
+    }
+  ]
+}

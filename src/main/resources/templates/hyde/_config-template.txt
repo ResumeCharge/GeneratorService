@@ -1,0 +1,102 @@
+# Dependencies
+markdown:         kramdown
+highlighter:      pygments
+
+# Permalinks
+permalink: /:categories/:title/
+relative_permalinks: false
+include:
+  - _pages
+
+# Setup
+title:            "[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.title)})]"
+tagline:          'A Jekyll theme'
+description:      "[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.description)})]"
+name:             "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})]"
+url:              #
+baseurl:          [# th:if="${staticSiteRequestManager.deploymentProvider == T(com.portfolio.generator.models.staticsite.DeploymentProvider).GITHUB}"]""[/][# th:unless="${staticSiteRequestManager.deploymentProvider == T(com.portfolio.generator.models.staticsite.DeploymentProvider).GITHUB}"]"/[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.websiteIdentifier)})]"[/]
+
+paginate:         5
+
+# Custom vars
+version:          2.1.0
+
+resume_social_links:
+[# th:if="${staticSiteRequestManager.resume.personalDetails.github}"]
+  resume_github_url: "https://github.com/[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.github)})]"
+[/]
+[# th:if="${staticSiteRequestManager.resume.personalDetails.linkedin}"]
+  resume_linkedin_url: "https://linkedin.com/in/[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.linkedin)})]"
+[/]
+[# th:if="${staticSiteRequestManager.resume.personalDetails.website}"]
+  resume_website_url: "https://[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.website)})]"
+[/]
+[# th:if="${staticSiteRequestManager.resume.extraLinkList}"]
+resume_extra_links:
+[# th:each="link: ${staticSiteRequestManager.resume.extraLinkList}"]
+  - value: [(${#strings.escapeJava(link.linkValue)})]
+[/]
+[/]
+
+sidebarItems:
+[# th:if="${staticSiteRequestManager.resume.educationList}"]
+    - ref: education
+      title: Education
+[/][# th:if="${staticSiteRequestManager.resume.workExperienceList}"]
+    - ref: workexperience
+      title: Work Experience
+[/][# th:if="${staticSiteRequestManager.resume.projectsList}"]
+    - ref: projects
+      title: Projects
+[/][# th:if="${staticSiteRequestManager.resume.skills}"]
+    - ref: skills
+      title: Skills
+[/][# th:if="${staticSiteRequestManager.resume.aboutMe}"]
+    - ref: aboutme
+      title: About Me
+[/]
+
+
+
+
+# Defaults
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: # true
+      share: false
+      related: false
+
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:path/
+  workexperience:
+    output: true
+    permalink: /:collection/:path/
+
+defaults:
+  # _projects
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: single
+      author_profile: true
+      share: false
+
+defaults:
+  # _workexperience
+  - scope:
+      path: ""
+      type: workexperience
+    values:
+      layout: single
+      author_profile: true
+      share: false

@@ -1,0 +1,44 @@
+<div class="sidebar">
+    <div class="container sidebar-sticky">
+        <div class="sidebar-about">
+            <img class="u-photo" src="{{ "assets/images/avatar.jpg" | relative_url }}">
+            <h1>
+                <a href="/">
+                    {{ site.name }}
+                </a>
+            </h1>
+            <p class="lead">{{ site.description }}</p>
+        </div>
+        <div class="sidebar-links">
+            <ul>
+                <!-- GitHub link -->
+                {% if site.resume_social_links.resume_github_url %}
+                <li class="icon-link-item"><a href="{{ site.resume_social_links.resume_github_url | url_filter }}" class="icon-link" itemprop="sameAs">{% include icons/icon-github.html %}</a></li>
+                {% endif %}
+
+                <!-- LinkedIn link -->
+                {% if site.resume_social_links.resume_linkedin_url %}
+                <li class="icon-link-item"><a href="{{ site.resume_social_links.resume_linkedin_url | url_filter }}" class="icon-link" itemprop="sameAs">{% include icons/icon-linkedin.html %}</a></li>
+                {% endif %}
+
+                <!-- Website link -->
+                {% if site.resume_social_links.resume_website_url %}
+                <li class="icon-link-item"><a href="{{ site.resume_social_links.resume_website_url | url_filter }}" class="icon-link" itemprop="url">{% include icons/icon-website.html %}</a></li>
+                {% endif %}
+
+                {% for link in site.resume_extra_links %}
+                <li class="icon-link-item"><a href="{{ link.value | url_filter }}" class="icon-link" itemprop="url">{% include icons/icon-link.html %}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="/">Home</a>
+            {% for sidebarItem in site.sidebarItems %}
+            <a class="sidebar-nav-item" href="{{ sidebarItem.ref | relative_url }}">{{ sidebarItem.title }}</a>
+            {% endfor %}
+        </nav>
+
+        <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+    </div>
+</div>

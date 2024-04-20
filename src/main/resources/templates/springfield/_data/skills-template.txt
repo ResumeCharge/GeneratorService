@@ -1,0 +1,1 @@
+skills: "[(${#strings.escapeJava(staticSiteRequestManager.resume.skills.skills)})]"

@@ -1,0 +1,6 @@
+[# th:if="${staticSiteRequestManager.resume.projectsList}"]
+[# th:each="project: ${staticSiteRequestManager.resume.projectsList}"]
+- project: [(${#strings.escapeJava(project.title)})]
+  description: "[(${#strings.escapeJava(project.details)})]"
+[/]
+[/]

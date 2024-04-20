@@ -1,0 +1,8 @@
+[# th:if="${staticSiteRequestManager.resume.educationList}"]
+[# th:each="education: ${staticSiteRequestManager.resume.educationList}"]
+- degree:  [(${#strings.escapeJava(education.degree)})]
+  uni: [(${#strings.escapeJava(education.university)})]
+  year: [(${#strings.escapeJava(education.startDate)})] - [(${#strings.escapeJava(education.endDate)})]
+  summary:  "[(${#strings.escapeJava(education.details)})]"
+[/]
+[/]

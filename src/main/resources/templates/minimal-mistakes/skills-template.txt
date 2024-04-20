@@ -1,0 +1,7 @@
+---
+layout: single
+permalink: /skills/
+author_profile: true
+title: Skills
+---
+[(${staticSiteRequestManager.resume.skills.skills})]

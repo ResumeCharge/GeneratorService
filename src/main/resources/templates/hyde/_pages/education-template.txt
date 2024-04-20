@@ -1,0 +1,18 @@
+---
+layout: single
+title: Education
+permalink: /education/
+---
+[# th:if="${staticSiteRequestManager.resume.educationList}"]
+[# th:each="education: ${staticSiteRequestManager.resume.educationList}"]
+# [(${#strings.escapeJava(education.university)})]
+
+**[(${#strings.escapeJava(education.degree)})]**
+
+[(${#strings.escapeJava(education.startDate)})] - [(${#strings.escapeJava(education.endDate)})]
+
+[(${education.details})]
+
+---
+[/]
+[/]

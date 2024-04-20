@@ -1,0 +1,8 @@
+---
+layout: page
+permalink: /aboutme/
+title: About Me
+---
+[# th:if="${staticSiteRequestManager.resume.aboutMe}"][(${staticSiteRequestManager.resume.aboutMe.aboutMe})][/]
+
+

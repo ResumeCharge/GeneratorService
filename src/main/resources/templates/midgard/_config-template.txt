@@ -1,0 +1,123 @@
+# Site
+# repository: Git repository where your resume will be hosted, only required if you are hosting on GitHub (eg. sproogen/modern-resume-theme)
+# favicon: Directory of your favicon (eg. images/favicon.ico)(optional)
+# Content configuration version
+version: 2
+
+# Personal info
+name: "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})]"
+title: "[(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.title)})]"
+[# th:if="${staticSiteRequestManager.resume.personalDetails.email}"]email: "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.email)})]"[/]
+
+
+# Dark Mode (true/false/never)
+darkmode: true
+
+# Social links
+[# th:if="${staticSiteRequestManager.resume.personalDetails.github}"]github_username: [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.github)})][/]
+[# th:if="${staticSiteRequestManager.resume.personalDetails.linkedin}"]linkedin_username: [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.linkedin)})][/]
+
+
+# Additional icon links
+[# th:if="${staticSiteRequestManager.resume.extraLinkList}"]
+additional_links:
+[# th:each="link: ${staticSiteRequestManager.resume.extraLinkList}"]
+- title: [(${#strings.escapeJava(link.linkName)})]
+  icon: fa-solid fa-link
+  url: [(${#strings.escapeJava(link.linkValue)})]
+[/]
+[/]
+
+
+
+# About Section
+# about_title: About Me (Use this to override about section title)
+[# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]
+about_profile_image: images/avatar.jpg
+[/]
+[# th:unless="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]
+about_profile_image: images/avatar.svg
+[/]
+about_content: "[(${#strings.escapeJava(staticSiteRequestManager.resume.careerSummary.summary)})]"
+[# th:if="${staticSiteRequestManager.websiteDetails.resumeS3URI}"]
+resume_pdf: assets/resume.pdf
+[/]
+
+
+content:
+[# th:if="${staticSiteRequestManager.resume.projectsList}"]
+  - title: Projects # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+[# th:each="project: ${staticSiteRequestManager.resume.projectsList}"]
+      - layout: left
+        border: weak
+        title: [(${#strings.escapeJava(project.title)})]
+        description: "[(${#strings.escapeJava(project.details)})]"
+[/]
+[/]
+
+[# th:if="${staticSiteRequestManager.resume.workExperienceList}"]
+  - title: Experience # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+[# th:each="experience: ${staticSiteRequestManager.resume.workExperienceList}"]
+      - layout: right
+        title: [(${#strings.escapeJava(experience.company)})]
+        sub_title: [(${#strings.escapeJava(experience.roleName)})]
+        caption: [(${#strings.escapeJava(experience.startDate)})] - [(${#strings.escapeJava(experience.endDate)})]
+        location: [(${#strings.escapeJava(experience.location)})]
+        description: "[(${#strings.escapeJava(experience.details)})]"
+[/]
+[/]
+[# th:if="${staticSiteRequestManager.resume.educationList}"]
+  - title: Education # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+[# th:each="education: ${staticSiteRequestManager.resume.educationList}"]
+      - layout: top-right
+        title: [(${#strings.escapeJava(education.university)})]
+        sub_title: [(${#strings.escapeJava(education.degree)})]
+        caption: [(${#strings.escapeJava(education.startDate)})] - [(${#strings.escapeJava(education.endDate)})]
+        description: "[(${#strings.escapeJava(education.details)})]"
+[/]
+[/]
+[# th:if="${staticSiteRequestManager.resume.skills}"]
+  - title: Skills
+    layout: text
+    content: "[(${#strings.escapeJava(staticSiteRequestManager.resume.skills.skills)})]"
+[/]
+
+[# th:if="${staticSiteRequestManager.resume.aboutMe}"]
+  - title: A Little More About Me
+    layout: text
+    content: "[(${#strings.escapeJava(staticSiteRequestManager.resume.aboutMe.aboutMe)})]"
+[/]
+
+# Footer
+footer_show_references: true
+# references_title: References on request (Override references text)
+
+# Build settings
+# theme: modern-resume-theme (Use this is you are hosting your resume yourself)
+# remote_theme: sproogen/modern-resume-theme (Use this if you are hosting your resume on GitHub)
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+plugins:
+ - jekyll-seo-tag
+
+exclude : [
+  "Gemfile",
+  "Gemfile.lock",
+  "node_modules",
+  "vendor/bundle/",
+  "vendor/cache/",
+  "vendor/gems/",
+  "vendor/ruby/",
+  "lib/",
+  "scripts/",
+  "docker-compose.yml",
+  ]

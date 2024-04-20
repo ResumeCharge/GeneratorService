@@ -1,0 +1,124 @@
+# Site
+repository: Git repository where your resume will be hosted, only required if you are hosting on GitHub (eg. sproogen/modern-resume-theme)
+# favicon: Directory of your favicon (eg. images/favicon.ico)(optional)
+
+baseurl: "/Midgard"
+
+# Content configuration version
+version: 2
+
+# Personal info
+name: Patrick Bateman
+title: Finance Executive
+email: pbateman@gmail.com
+
+
+# Dark Mode (true/false/never)
+darkmode: true
+
+# Social links
+twitter_username: jekyllrb
+github_username:  jekyll
+stackoverflow_username: "00000001"
+dribbble_username: jekyll
+facebook_username: jekyll
+flickr_username: jekyll
+instagram_username: jekyll
+linkedin_username: jekyll
+xing_username: jekyll
+pinterest_username: jekyll
+youtube_username: jekyll
+orcid_username: 0000-0000-0000-0000
+googlescholar_username: D847cGsAAAAJ
+
+# Additional icon links
+additional_links:
+- title: Link name
+  icon: Font Awesome brand icon name (eg. fab fa-twitter) (https://fontawesome.com/icons?d=gallery&s=brands&m=free)
+  url: Link url (eg. https://google.com)
+# - title: another link
+#   icon: font awesome brand icon name (eg. fab fa-twitter) (https://fontawesome.com/icons?d=gallery&s=brands&m=free)
+#   url: Link url (eg. https://google.com)
+
+# Google Analytics and Tag Manager
+# Using more than one of these may cause issues with reporting
+# gtm: "GTM-0000000"
+# gtag: "UA-00000000-0"
+# google_analytics: "UA-00000000-0"
+
+# About Section
+# about_title: About Me (Use this to override about section title)
+about_profile_image: images/avatar.svg
+about_content: | # this will include new lines to allow paragraphs
+  Mergers and acquisitions specialist at Pierce & Pierce. 
+
+  Expert in: 
+    - Finance
+    - Business
+    - Company Relations
+    - Auditing
+
+content:
+  - title: Projects # Title for the section
+    layout: list # Type of content section (list/text)
+    content:
+      - layout: left
+        border: weak  # Value of `weak` will display a weak border below this item. # Any 
+                      # other value (or no value) means no border will be displayed
+        title: EasyTax
+        quote: >
+          Created a free tax software for individuals.
+        description: | # this will include new lines to allow paragraphs
+          Designed, developed and marketed a free tax software that allows individuals to file their taxes at no cost.
+  - title: Experience
+    layout: list
+    content:
+      - layout: right
+        title: Pierce & Pierce
+        sub_title: Mergers and Acquisitions
+        caption: August 1980 - Current
+        description: | # this will include new lines to allow paragraphs
+           Oversaw transactions in which the ownership of companies, other business organizations, or their operating units are transferred or consolidated with other entities
+  - title: Education
+    layout: list
+    content:
+      - layout: top-right
+        title: Yale
+        sub_title: BA Economics
+        caption: September 1975 - September 1979
+  - title: A Little More About Me
+    layout: text
+    content: | # this will include new lines to allow paragraphs
+      Things I enjoy:
+        - Eating out
+        - Skiing
+        - Exercise 
+        - Skin care
+
+# Footer
+footer_show_references: true
+# references_title: References on request (Override references text)
+
+# Build settings
+# theme: modern-resume-theme (Use this is you are hosting your resume yourself)
+# remote_theme: sproogen/modern-resume-theme (Use this if you are hosting your resume on GitHub)
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+plugins:
+ - jekyll-seo-tag
+
+exclude : [
+  "Gemfile",
+  "Gemfile.lock",
+  "node_modules",
+  "vendor/bundle/",
+  "vendor/cache/",
+  "vendor/gems/",
+  "vendor/ruby/",
+  "lib/",
+  "scripts/",
+  "docker-compose.yml",
+  ]

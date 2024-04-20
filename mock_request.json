@@ -1,0 +1,99 @@
+{
+    "resume":
+    {
+        "userId": "1234",
+        "nickname": "Amazon Resume",
+        "createdAt": 1654313505,
+        "lastUpdatedAt": 1654313505,
+        "personalDetails":
+        {
+            "firstName": "Adam",
+            "lastName": "Lawson",
+            "positionTitle": "Software Engineer",
+            "location": "Vancouver",
+            "tagline": "An awesome software engineer",
+            "avatar": "",
+            "email": "adam.lawson1337@gmail.com",
+            "phone": "+1636065783",
+            "website": "adamlawson.dev",
+            "linkedin": "alaws057",
+            "github": "adamlawson99",
+            "languages":
+            [
+                {
+                    "name": "English",
+                    "level": "Fluent"
+                }
+            ]
+        },
+        "extraLinkList":
+        [
+            {
+                "linkName": "My Blog",
+                "linkValue": "https://adamlawson.dev/IntelligentProgrammer/"
+            }
+        ],
+        "careerSummary":
+        {
+            "summary": "Hi, my name is James Grant, I'm a full stack web developer with over 9 years experience currently specialising in React development.\r\n  I am currently working for NatWest as a Lead Frontend Software Engineer on their comercial banking platform, Bankline.\r\n  I enjoy making clean and interactive UI that is quick and easy to use whilst also giving users an enjoyable experience.\r\n  I like working creating clean and efficient developer experiences to allow developers to focus on code quality and the end user experience.\r\n  I have worked with a range of different languages and frameworks and I am always looking for opportunities to work\r\n  with something new. The things that I currently have the most experience working with are:\r\n  <mark>ES6 Javascript</mark>,\r\n  <mark>React &amp; Redux</mark>,\r\n  <mark>Node.js</mark>,\r\n  <mark>Java</mark>,\r\n  <mark>MySQL</mark>,\r\n  <mark>SASS</mark>,\r\n  <mark>git</mark> and\r\n  <mark>AWS</mark>."
+        },
+        "educationList":
+        [
+            {
+                "degree": "software engineering",
+                "university": "university of ottawa",
+                "startDate": "September 2017",
+                "endDate": "December 2021",
+                "details": "During my degree at Bristol University I learnt lots of key skills such as team work and project management. Although\r\nwe mainly focused on software development and the principles of programming I use a lot of these skills to\r\nmy advantage in my day to day work.\r\nWhile at Bristol Uni I spent a lot of my free time with the Kitesurfing society. I spent 3 years on the committee\r\nas a secretary, trip rep and then media and promotions manager. During this time I took on roles from organising\r\ntransport and designing posters to organising a trip to Portugal for over 30 students."
+            }
+        ],
+        "workExperienceList":
+        [
+            {
+                "roleName": "Software Engineer I",
+                "company": "Amazon",
+                "location": "Vancouver - Remote",
+                "startDate": "April 2022",
+                "endDate": "Present",
+                "details": "During my time at Simitive I worked as part of an agile team building our own in house web based software and\r\nalso a large scale website for an international client. I gained experience working with a continuous integration\r\nworkflow using tools such as <mark>Jenkins</mark> and working with Amazon Web Services for deployments. We built most\r\nof our software using <mark>Symfony</mark>, <mark>Backbone</mark>, <mark>Marionette</mark>, <mark>Vue</mark> and <mark>Vuex</mark>.\r\nFor 6 months I was working on delivering a standalone web product for an international client that services over\r\n600,000 users. This has been built from the ground up using <mark>Symfony</mark> to provide a backend API and\r\n<mark>Backbone</mark> for the front end. I also gained a lot of experience with <mark>Elasticsearch</mark> to provide\r\nsearch functionality of millions of entities to the front end. During the project I spent time out of hours\r\ncommunicating with the client, performing deployments and providing support.\r\nTowards the end of my time at Simitive my role involved assisting with the company's devOps, this included managing\r\nour <mark>AWS</mark> infrastructure as well as deploying and migrating sites. I also spent time configuring and maintaining\r\nour clients SSO, this mostly involves configuring new clients who are using <mark>AD FS</mark>, <mark>Shibboleth</mark> and\r\n<mark>CAS</mark> but also maintaining our software's SSO functionality."
+            }
+        ],
+        "projectsList":
+        [
+            {
+                "title": "Discord Bot",
+                "details": "This is a <mark>Jekyll</mark> theme that I have recently created, in fact it is what this resume has been built with.\r\nI decided I wanted to learn how to create a fully open source project and thought that this would be the perfect project to do this with.\r\nIt has allowed me to share something I have created in a way that will be helpful for lots of people while also learning from this myself."
+            }
+        ],
+        "skills":
+        {
+            "skillsCategoryList":
+            [
+                {
+                    "name": "Organizational leadership",
+                    "description": "I have several years of experience leading organziations from community groups to business departments. From public speaking, to mentoring, to coordination of people and events, I can lead in any context."
+                },
+                {
+                    "name": "Communications strategy",
+                    "description": "Content and marketing strategy,"
+                }
+            ]
+        },
+        "awardsAndAccoladesList":
+        [],
+        "extraDetails":
+        {}
+    },
+    "websiteDetails":
+    {
+        "title": "My Awesome Wesbite",
+        "description": "Some cool website",
+        "templateId": "1234",
+        "templateName": "springfield",
+        "extraConfigurationOptions":
+        {}
+    },
+    "orderId": "1234",
+    "userId": "1234",
+    "createdAt": 1654313505
+}

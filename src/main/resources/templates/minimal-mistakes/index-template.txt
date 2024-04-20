@@ -1,0 +1,11 @@
+---
+title: Welcome
+layout: single
+author_profile: true
+---
+[# th:if="${staticSiteRequestManager.resume.careerSummary.summary}"]
+[(${staticSiteRequestManager.resume.careerSummary.summary})]
+[/]
+
+[Resume](./assets/files/resume.pdf)
+

@@ -1,0 +1,3 @@
+[# th:each="link: ${staticSiteRequestManager.resume.extraLinkList}"]- url: "[(${link.linkValue})]"
+  description: [(${link.linkName})]
+[/]

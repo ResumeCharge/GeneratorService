@@ -1,0 +1,39 @@
+---
+title: [(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.title)})]
+feature_text: "## [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]\n\n![Profile Picture](./assets/images/avatar.jpg)[/][# th:if="${staticSiteRequestManager.resume.personalDetails.positionTitle}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.positionTitle)})][/][# th:if="${staticSiteRequestManager.resume.careerSummary.summary}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.careerSummary.summary)})][/]"
+---
+
+#### <ins>Experience</ins>
+[# th:each="workExperience: ${staticSiteRequestManager.resume.workExperienceList}"]
+###### [(${#strings.escapeJava(workExperience.company)})]
+<ins>[(${#strings.escapeJava(workExperience.roleName)})]</ins><br/>
+<small> [(${#strings.escapeJava(workExperience.startDate)})] - [(${#strings.escapeJava(workExperience.endDate)})] </small><br/>
+<small>[(${#strings.escapeJava(workExperience.location)})]</small><br/>
+[(${workExperience.details})]
+[/]
+
+
+
+#### <ins>Education</ins>
+[# th:each="education: ${staticSiteRequestManager.resume.educationList}"]
+###### [(${#strings.escapeJava(education.university)})]
+[(${#strings.escapeJava(education.degree)})]<br/>
+[(${#strings.escapeJava(education.startDate)})] - [(${#strings.escapeJava(education.endDate)})]
+[/]
+
+#### <ins>Projects</ins>
+[# th:each="project: ${staticSiteRequestManager.resume.projectsList}"]
+###### [(${#strings.escapeJava(project.title)})] <br/>
+[(${#strings.escapeJava(project.details)})]
+[/]
+
+[# th:if="${staticSiteRequestManager.resume.skills}"]
+#### <ins>Skills</ins>
+[(${staticSiteRequestManager.resume.skills.skills})]
+[/]
+
+[# th:if="${staticSiteRequestManager.resume.aboutMe}"]
+#### <ins>About Me</ins>
+[(${staticSiteRequestManager.resume.aboutMe.aboutMe})]
+[/]
+
