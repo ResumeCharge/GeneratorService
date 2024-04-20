@@ -46,8 +46,8 @@ locally please reach-out to me at [adam@adamlawson.dev](mailto:adam@adamlawson.d
 
 * Java 11
 * Maven
-* [DeploymentService]() deployed and running
-* [UserService]() deployed and running
+* [DeploymentService](https://github.com/ResumeCharge/DeploymentService) deployed and running
+* [UserService](https://github.com/ResumeCharge/UserService) deployed and running
 
 ### Installation
 
