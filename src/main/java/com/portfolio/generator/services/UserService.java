@@ -15,18 +15,10 @@ import java.io.IOException;
 
 @Component
 public class UserService implements IUserService {
-  private static final String CLIENT_ID_HEADER = "client_id";
-  private static final String CLIENT_SECRET_HEADER = "client_secret";
   private static final String USER_SERVICE_TOKEN_ENDPOINT = "http://localhost/api/users/%s/token";
   private static final String USER_SERVICE_USERNAME_ENDPOINT = "http://localhost/api/users/%s/githubUsername";
   private final CloseableHttpClient client;
   private final IHttpUtils httpUtils;
-
-  @Value("${CLIENT_SECRET}")
-  private String clientSecret;
-
-  @Value("${CLIENT_ID}")
-  private String clientId;
 
   public UserService(final CloseableHttpClient client, final IHttpUtils httpUtils) {
     this.client = client;
@@ -46,10 +38,8 @@ public class UserService implements IUserService {
   }
 
   private String callUserEndpointAndReturnString(final String endPoint)
-      throws IOException {
+          throws IOException {
     final HttpGet request = new HttpGet(endPoint);
-    request.addHeader(CLIENT_ID_HEADER, clientId);
-    request.addHeader(CLIENT_SECRET_HEADER, clientSecret);
     request.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
     try (final CloseableHttpResponse response = client.execute(request)) {
       final HttpEntity entity = response.getEntity();
@@ -61,21 +51,5 @@ public class UserService implements IUserService {
       }
       throw new IOException();
     }
-  }
-
-  public String getClientSecret() {
-    return clientSecret;
-  }
-
-  public void setClientSecret(final String clientSecret) {
-    this.clientSecret = clientSecret;
-  }
-
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(final String clientId) {
-    this.clientId = clientId;
   }
 }
