@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +22,15 @@ import java.util.Map;
 
 @Component
 public class DeploymentStatusHelper implements IDeploymentStatusHelper {
+  @Value("${DEPLOYMENT_SERVICE_PORT}")
+  private String DEPLOYMENT_SERVICE_PORT;
   private static final String UPDATE_DEPLOYMENT_STATUS_MSG =
       "Updating deployment status. Request: %s";
   private static final String UPDATE_DEPLOYMENT_STATUS_ERR_MSG =
       "Failed to update deployment status. Request: %s. Error: %s";
   private static final String UPDATE_DEPLOYMENT_STATUS_MISSING_FIELDS_ERR_MSG =
       "Failed to update deployment status. One of progress or status field on DeploymentStatus must be set.";
-  private static final String DEPLOYMENT_SERVICE_URL = "http://localhost/api/deployments/%s";
+  private final String DEPLOYMENT_SERVICE_URL = String.format("http://localhost:%s/api/deployments", DEPLOYMENT_SERVICE_PORT);
   private static final Logger logger = LoggerFactory.getLogger(GitHubService.class);
   private final CloseableHttpClient closeableHttpClient;
 

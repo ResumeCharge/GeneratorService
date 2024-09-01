@@ -12,11 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class UserService implements IUserService {
-  private static final String USER_SERVICE_TOKEN_ENDPOINT = "http://localhost/api/users/%s/token";
-  private static final String USER_SERVICE_USERNAME_ENDPOINT = "http://localhost/api/users/%s/githubUsername";
+  @Value("${USER_SERVICE_PORT}")
+  private String USER_SERVICE_PORT;
   private final CloseableHttpClient client;
   private final IHttpUtils httpUtils;
 
@@ -27,19 +28,19 @@ public class UserService implements IUserService {
 
   @Override
   public String getUserOAuthToken(final String userId) throws IOException {
-    final String endpoint = String.format(USER_SERVICE_TOKEN_ENDPOINT, userId);
+    final String endpoint = getUserServicePath(Optional.of("/users/%s/token"));
     return callUserEndpointAndReturnString(endpoint);
   }
 
   @Override
   public String getUserGitHubUserName(final String userId) throws IOException {
-    final String endpoint = String.format(USER_SERVICE_USERNAME_ENDPOINT, userId);
+    final String endpoint = getUserServicePath(Optional.of("/users/%s/githubUsername"));
     return callUserEndpointAndReturnString(endpoint);
   }
 
-  private String callUserEndpointAndReturnString(final String endPoint)
+  private String callUserEndpointAndReturnString(final String url)
           throws IOException {
-    final HttpGet request = new HttpGet(endPoint);
+    final HttpGet request = new HttpGet(url);
     request.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
     try (final CloseableHttpResponse response = client.execute(request)) {
       final HttpEntity entity = response.getEntity();
@@ -51,5 +52,23 @@ public class UserService implements IUserService {
       }
       throw new IOException();
     }
+  }
+
+  @Override
+  public Boolean healthCheckUserService() {
+    try {
+      callUserEndpointAndReturnString(getUserServicePath(Optional.empty()));
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private String getUserServicePath(final Optional<String> endpoint) {
+    String userServiceEndpoint = String.format("http://localhost:%s/api", USER_SERVICE_PORT);
+    if (endpoint.isPresent()) {
+      userServiceEndpoint = userServiceEndpoint + endpoint.get();
+    }
+    return userServiceEndpoint;
   }
 }
