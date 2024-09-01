@@ -16,6 +16,7 @@ import com.portfolio.generator.utilities.exceptions.ActionProcessingFailedExcept
 import com.portfolio.generator.utilities.exceptions.PortfolioGenerationFailedException;
 import com.portfolio.generator.utilities.exceptions.TemplateProcessingFailedException;
 import com.portfolio.generator.utilities.helpers.*;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -102,8 +104,7 @@ public class PortfolioGeneratorService implements IPortfolioGeneratorService {
       logger.error("Portfolio generation failed", e);
       throw new PortfolioGenerationFailedException("Unable to create portfolio", e);
     } finally {
-      logger.info("FINALLY!");
-      //cleanGeneratedOutput(request);
+      cleanGeneratedOutput(request);
     }
   }
 
@@ -255,11 +256,22 @@ public class PortfolioGeneratorService implements IPortfolioGeneratorService {
     return true;
   }
 
-  public String getResourceOutputRoot() {
-    return resourceOutputRoot;
-  }
-
-  public void setResourceOutputRoot(String resourceOutputRoot) {
-    this.resourceOutputRoot = resourceOutputRoot;
+  /**
+   * Once the portfolio is sent to Github we have no more use for the generated output, so delete it
+   **/
+  private void cleanGeneratedOutput(final StaticSiteRequestModel staticSiteRequestManager) {
+    if(staticSiteRequestManager.resume == null){
+      return;
+    }
+    final String outputLocation = String.format("%s/out/generated-templates/%s", resourceOutputRoot, staticSiteRequestManager.resume.getUUID());
+    final Path outputPath = Paths.get(outputLocation);
+    if(!Files.exists(outputPath)){
+      return;
+    }
+    try {
+      FileUtils.deleteDirectory(outputPath.toFile());
+    } catch (final IOException e) {
+      logger.warn("Failed to delete output directory " + outputLocation, e);
+    }
   }
 }

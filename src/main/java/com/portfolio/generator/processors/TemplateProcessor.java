@@ -10,7 +10,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 @Component
 public class TemplateProcessor implements ITemplateProcessor {
-    private final String PORTFOLIO_DETAILS = "portfolioDetails";
     private final SpringTemplateEngine templateEngine;
 
     public TemplateProcessor(SpringTemplateEngine templateEngine) {
