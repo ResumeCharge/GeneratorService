@@ -1,6 +1,6 @@
 ---
 title: [(${#strings.escapeJava(staticSiteRequestManager.websiteDetails.title)})]
-feature_text: "## [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]\n\n![Profile Picture](./assets/images/avatar.jpg)[/][# th:if="${staticSiteRequestManager.resume.personalDetails.positionTitle}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.positionTitle)})][/][# th:if="${staticSiteRequestManager.resume.careerSummary.summary}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.careerSummary.summary)})][/]"
+feature_text: "## [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureFile}"]\n\n![Profile Picture](./assets/images/avatar.jpg)[/][# th:if="${staticSiteRequestManager.resume.personalDetails.positionTitle}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.positionTitle)})][/][# th:if="${staticSiteRequestManager.resume.careerSummary.summary}"]\n\n[(${#strings.escapeJava(staticSiteRequestManager.resume.careerSummary.summary)})][/]"
 ---
 
 #### <ins>Experience</ins>

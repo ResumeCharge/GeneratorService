@@ -162,8 +162,8 @@ public class DbDeploymentModel {
 
   // inner class for the websiteDetails field
   public static class WebsiteDetails {
-    private String profilePictureS3URI;
-    private String resumeS3URI;
+    private String profilePictureFile;
+    private String resumeFile;
     private String description;
     private String title;
     private String templateName;
@@ -171,20 +171,22 @@ public class DbDeploymentModel {
     private String websiteIdentifier;
 
     // getters and setters for all the private variables
-    public String getProfilePictureS3URI() {
-      return profilePictureS3URI;
+
+
+    public String getProfilePictureFile() {
+      return profilePictureFile;
     }
 
-    public void setProfilePictureS3URI(final String profilePictureS3URI) {
-      this.profilePictureS3URI = profilePictureS3URI;
+    public void setProfilePictureFile(String profilePictureFile) {
+      this.profilePictureFile = profilePictureFile;
     }
 
-    public String getResumeS3URI() {
-      return resumeS3URI;
+    public String getResumeFile() {
+      return resumeFile;
     }
 
-    public void setResumeS3URI(final String resumeS3URI) {
-      this.resumeS3URI = resumeS3URI;
+    public void setResumeFile(String resumeFile) {
+      this.resumeFile = resumeFile;
     }
 
     public String getDescription() {
@@ -229,11 +231,11 @@ public class DbDeploymentModel {
 
     public WebsiteDetailsModel toWebsiteDetailsModel() {
       final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
-      websiteDetailsModel.setProfilePictureS3URI(this.profilePictureS3URI);
+      websiteDetailsModel.setProfilePictureFile(this.profilePictureFile);
       websiteDetailsModel.setTitle(this.title);
       websiteDetailsModel.setDescription(this.description);
       websiteDetailsModel.setTemplateName(this.templateName);
-      websiteDetailsModel.setResumeS3URI(this.resumeS3URI);
+      websiteDetailsModel.setResumeFile(this.resumeFile);
       websiteDetailsModel.setWebsiteIdentifier(this.websiteIdentifier);
       websiteDetailsModel.setResumeName(this.resumeName);
       return websiteDetailsModel;

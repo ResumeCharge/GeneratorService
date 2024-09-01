@@ -6,7 +6,7 @@ title: Home
 # My Personal Portfolio
 
 [(${staticSiteRequestManager.resume.careerSummary.summary})]
-[# th:if="${staticSiteRequestManager.websiteDetails.resumeS3URI}"]
+[# th:if="${staticSiteRequestManager.websiteDetails.resumeFile}"]
 [Resume]({{ "/assets/files/resume.pdf" | relative_url }})
 [/]
 

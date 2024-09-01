@@ -19,11 +19,11 @@
       "inputLocation": "out/generated-templates/%s/generator-config.json"
     },
     {
-      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "actionType": "COPY_RESUME_FROM_STATIC_ASSETS",
       "outputLocation": "out/generated-templates/%s/assets/resume.pdf"
     },
     {
-      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "actionType": "COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS",
       "outputLocation": "out/generated-templates/%s/images/avatar.jpg"
     },
     {

@@ -9,4 +9,6 @@ public interface IIOFactory {
   BufferedReader getBufferedReader(final InputStream inputStream) throws FileNotFoundException;
   Path getPath(final String first, final String... more);
   void copyDirectory(final File inputDirectory, final File outputDirectory) throws IOException;
+  void copyFile(final File inputFile, final File outputFile) throws IOException;
+  boolean exists(final Path inputFilePath);
 }

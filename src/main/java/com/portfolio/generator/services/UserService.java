@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 public class UserService implements IUserService {
   @Value("${USER_SERVICE_PORT}")
-  private String USER_SERVICE_PORT;
+  private String userServicePort;
   private final CloseableHttpClient client;
   private final IHttpUtils httpUtils;
 
@@ -28,13 +28,13 @@ public class UserService implements IUserService {
 
   @Override
   public String getUserOAuthToken(final String userId) throws IOException {
-    final String endpoint = getUserServicePath(Optional.of("/users/%s/token"));
+    final String endpoint = getUserServicePath(Optional.of(String.format("/users/%s/token", userId)));
     return callUserEndpointAndReturnString(endpoint);
   }
 
   @Override
   public String getUserGitHubUserName(final String userId) throws IOException {
-    final String endpoint = getUserServicePath(Optional.of("/users/%s/githubUsername"));
+    final String endpoint = getUserServicePath(Optional.of(String.format("/users/%s/githubUsername", userId)));
     return callUserEndpointAndReturnString(endpoint);
   }
 
@@ -65,10 +65,18 @@ public class UserService implements IUserService {
   }
 
   private String getUserServicePath(final Optional<String> endpoint) {
-    String userServiceEndpoint = String.format("http://localhost:%s/api", USER_SERVICE_PORT);
+    String userServiceEndpoint = String.format("http://localhost:%s/api", userServicePort);
     if (endpoint.isPresent()) {
       userServiceEndpoint = userServiceEndpoint + endpoint.get();
     }
     return userServiceEndpoint;
+  }
+
+  public String getUserServicePort() {
+    return userServicePort;
+  }
+
+  public void setUserServicePort(String userServicePort) {
+    this.userServicePort = userServicePort;
   }
 }

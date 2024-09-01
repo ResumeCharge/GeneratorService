@@ -14,14 +14,14 @@ class WebsiteDetailsModelTest {
     websiteDetails.setDescription("description");
     websiteDetails.setTemplateName("template");
     websiteDetails.setExtraConfigurationOptions(new HashMap<>());
-    websiteDetails.setResumeS3URI("resume");
-    websiteDetails.setProfilePictureS3URI("profilePicture");
+    websiteDetails.setResumeFile("resume");
+    websiteDetails.setProfilePictureFile("profilePicture");
 
     assertThat(websiteDetails.getTitle()).isEqualTo("title");
     assertThat(websiteDetails.getDescription()).isEqualTo("description");
     assertThat(websiteDetails.getTemplateName()).isEqualTo("template");
-    assertThat(websiteDetails.getResumeS3URI()).isEqualTo("resume");
-    assertThat(websiteDetails.getProfilePictureS3URI()).isEqualTo("profilePicture");
+    assertThat(websiteDetails.getResumeFile()).isEqualTo("resume");
+    assertThat(websiteDetails.getProfilePictureFile()).isEqualTo("profilePicture");
     assertThat(websiteDetails.getExtraConfigurationOptions().isEmpty()).isTrue();
     assertThat(websiteDetails.toString()).isNotNull();
 

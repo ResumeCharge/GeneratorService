@@ -23,14 +23,13 @@ import java.util.Map;
 @Component
 public class DeploymentStatusHelper implements IDeploymentStatusHelper {
   @Value("${DEPLOYMENT_SERVICE_PORT}")
-  private String DEPLOYMENT_SERVICE_PORT;
+  private String deploymentServicePort;
   private static final String UPDATE_DEPLOYMENT_STATUS_MSG =
       "Updating deployment status. Request: %s";
   private static final String UPDATE_DEPLOYMENT_STATUS_ERR_MSG =
       "Failed to update deployment status. Request: %s. Error: %s";
   private static final String UPDATE_DEPLOYMENT_STATUS_MISSING_FIELDS_ERR_MSG =
       "Failed to update deployment status. One of progress or status field on DeploymentStatus must be set.";
-  private final String DEPLOYMENT_SERVICE_URL = String.format("http://localhost:%s/api/deployments", DEPLOYMENT_SERVICE_PORT);
   private static final Logger logger = LoggerFactory.getLogger(GitHubService.class);
   private final CloseableHttpClient closeableHttpClient;
 
@@ -63,7 +62,7 @@ public class DeploymentStatusHelper implements IDeploymentStatusHelper {
       throws UnsupportedEncodingException, JsonProcessingException {
     final Map<String, Object> body = getRequestBody(deploymentStatus);
     final HttpPatch request =
-        new HttpPatch(String.format(DEPLOYMENT_SERVICE_URL, deploymentStatus.getDeploymentId()));
+        new HttpPatch(String.format("http://localhost:%s/api/deployments/%s", deploymentServicePort, deploymentStatus.getDeploymentId()));
     request.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
     final String bodyAsJson = new ObjectMapper().writeValueAsString(body);
     final StringEntity requestEntity = new StringEntity(bodyAsJson);
@@ -92,4 +91,5 @@ public class DeploymentStatusHelper implements IDeploymentStatusHelper {
   public void destroy() throws IOException {
     closeableHttpClient.close();
   }
+
 }

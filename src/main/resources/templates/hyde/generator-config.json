@@ -69,11 +69,11 @@
       "inputLocation": "out/generated-templates/%s/_pages/aboutme-template.txt"
     },
     {
-      "actionType": "DOWNLOAD_RESUME_FROM_S3",
+      "actionType": "COPY_RESUME_FROM_STATIC_ASSETS",
       "outputLocation": "out/generated-templates/%s/assets/files/resume.pdf"
     },
     {
-      "actionType": "DOWNLOAD_PROFILE_PICTURE_FROM_S3",
+      "actionType": "COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS",
       "outputLocation": "out/generated-templates/%s/assets/images/avatar.jpg"
     },
     {

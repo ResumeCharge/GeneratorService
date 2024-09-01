@@ -1,18 +1,11 @@
 package com.portfolio.generator.processors;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3URI;
 import com.portfolio.generator.models.ActionResultModel;
 import com.portfolio.generator.models.ActionsModel;
 import com.portfolio.generator.models.staticsite.StaticSiteRequestModel;
 import com.portfolio.generator.utilities.IO.IIOFactory;
-import com.portfolio.generator.utilities.aws.factories.IAWSClientFactory;
-import com.portfolio.generator.utilities.aws.factories.IS3ObjectFactory;
 import com.portfolio.generator.utilities.exceptions.ActionProcessingFailedException;
 import com.portfolio.generator.utilities.exceptions.PortfolioGenerationFailedException;
-import com.portfolio.generator.utilities.helpers.s3.IS3BucketHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -24,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -36,33 +30,26 @@ import java.nio.file.Paths;
 @Component
 public class ActionProcessor implements IActionProcessor {
   private static final String INVALID_ACTION_TYPE_ERROR =
-      "Invalid Action Type Provided, Action Type: %s is invalid";
+          "Invalid Action Type Provided, Action Type: %s is invalid";
   private static final String ACTION_PROCESSING_EXCEPTION = "Unable to process action %s";
   private static final Logger logger = LoggerFactory.getLogger(ActionProcessor.class);
-  private final IS3BucketHelper s3BucketHelper;
-  private final IS3ObjectFactory S3ObjectFactory;
   private final IIOFactory ioFactory;
-  private final IAWSClientFactory awsClientFactory;
   private final ResourceLoader resourceLoader;
 
   @Value("${RESOURCES_OUTPUT_ROOT}")
   private String resourceOutputRoot;
 
-  public ActionProcessor(final IS3BucketHelper s3BucketHelper,
-                         final IS3ObjectFactory S3ObjectFactory,
-                         final IIOFactory ioFactory,
-                         final IAWSClientFactory awsClientFactory,
-                         final ResourceLoader resourceLoader) {
-    this.s3BucketHelper = s3BucketHelper;
-    this.S3ObjectFactory = S3ObjectFactory;
+  @Value("${STATIC_ASSETS_DIRECTORY}")
+  private String staticAssetsDirectory;
+
+  public ActionProcessor(final IIOFactory ioFactory, final ResourceLoader resourceLoader) {
     this.ioFactory = ioFactory;
-    this.awsClientFactory = awsClientFactory;
     this.resourceLoader = resourceLoader;
   }
 
   @Override
   public ActionResultModel processAction(
-      final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
+          final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
   ) throws ActionProcessingFailedException {
     final ActionResultModel actionResult;
     try {
@@ -73,115 +60,117 @@ public class ActionProcessor implements IActionProcessor {
         case COPY_DIRECTORY:
           actionResult = copyDirectory(action, staticSiteRequestManager);
           break;
-        case DOWNLOAD_RESUME_FROM_S3:
-          actionResult = downloadResumeFromS3(action, staticSiteRequestManager);
+        case COPY_RESUME_FROM_STATIC_ASSETS:
+          actionResult = copyResumeFromStaticAssets(action, staticSiteRequestManager);
           break;
-        case DOWNLOAD_PROFILE_PICTURE_FROM_S3:
-          actionResult = downloadProfilePictureFromS3(action, staticSiteRequestManager);
+        case COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS:
+          actionResult = copyProfilePictureFromStaticAssets(action, staticSiteRequestManager);
           break;
         default:
           throw new IllegalArgumentException(
-              String.format(INVALID_ACTION_TYPE_ERROR, action.getActionType()));
+                  String.format(INVALID_ACTION_TYPE_ERROR, action.getActionType()));
       }
       return actionResult;
     } catch (final Exception e) {
       logger.error("failure in action processor", e);
       throw new ActionProcessingFailedException(
-          String.format(ACTION_PROCESSING_EXCEPTION, action.getActionType()), e);
+              String.format(ACTION_PROCESSING_EXCEPTION, action.getActionType()), e);
     }
   }
 
   private ActionResultModel deleteFile(
-      final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
+          final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
   ) {
     final String filePath = getFilePath(action.getInputLocation(),
-        staticSiteRequestManager.resume.getUUID());
+            staticSiteRequestManager.resume.getUUID());
     Validate.notBlank(filePath);
     final File fileToDelete = getFileFromFilePathString(filePath);
     final boolean isSuccessful = fileToDelete.delete();
     return new ActionResultModel.Builder()
-        .setIsSuccessful(isSuccessful)
-        .build();
+            .setIsSuccessful(isSuccessful)
+            .build();
   }
 
   private ActionResultModel copyDirectory(
-      final ActionsModel action, final StaticSiteRequestModel staticSiteRequest
+          final ActionsModel action, final StaticSiteRequestModel staticSiteRequest
   )
-      throws IOException, PortfolioGenerationFailedException {
+          throws IOException, PortfolioGenerationFailedException {
     final File inputDirectory = getDirectoryAsFileFromClasspath(action.getInputLocation());
     final String outputDirectory = getFilePath(action.getOutputLocation(),
-        staticSiteRequest.resume.getUUID()
+            staticSiteRequest.resume.getUUID()
     );
     Validate.notNull(inputDirectory);
     Validate.notBlank(outputDirectory);
     final File outputDirectoryFile = getFileFromFilePathString(outputDirectory);
     ioFactory.copyDirectory(inputDirectory, outputDirectoryFile);
     return new ActionResultModel.Builder()
-        .setIsSuccessful(true)
-        .build();
-  }
-
-  private ActionResultModel downloadResumeFromS3(
-      final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
-  ) {
-    final String uri = staticSiteRequestManager.websiteDetails.getResumeS3URI();
-    if (StringUtils.isBlank(uri)) {
-      logger.error("Object URI was blank, not downloading from S3");
-      return new ActionResultModel.Builder()
-          .setIsSuccessful(true)
-          .build();
-    }
-    final String outputLocation = getFilePath(
-        action.getOutputLocation(),
-        staticSiteRequestManager.resume.getUUID()
-    );
-    return downloadFromS3(uri, outputLocation);
-  }
-
-  private ActionResultModel downloadProfilePictureFromS3(
-      final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
-  ) {
-    final String uri = staticSiteRequestManager.websiteDetails.getProfilePictureS3URI();
-    if (StringUtils.isBlank(uri)) {
-      logger.error("Object URI was blank, not downloading from S3");
-      return new ActionResultModel.Builder()
-          .setIsSuccessful(true)
-          .build();
-    }
-    final String outputLocation = getFilePath(
-        action.getOutputLocation(),
-        staticSiteRequestManager.resume.getUUID()
-    );
-    return downloadFromS3(uri, outputLocation);
-  }
-
-
-  /**
-   * Downloads the specified object from the S3 bucket.
-   * Retry 3 times on error
-   */
-  private ActionResultModel downloadFromS3(
-      final String amazonS3URIAsString, final String outputLocation
-  ) {
-    final DefaultAWSCredentialsProviderChain credentialsProvider = new DefaultAWSCredentialsProviderChain();
-    final AmazonS3 s3Client = awsClientFactory.getS3Client(credentialsProvider, Regions.US_EAST_1);
-    for (int retry = 0; retry < 3; retry++) {
-      try {
-        final AmazonS3URI objectUri = S3ObjectFactory.getAmazonS3URI(amazonS3URIAsString);
-        final String objectKey = objectUri.getKey();
-        final Path outputDirectoryPath = Paths.get(outputLocation);
-        s3BucketHelper.downloadFromS3Bucket(s3Client, objectKey, outputDirectoryPath);
-        return new ActionResultModel.Builder()
             .setIsSuccessful(true)
             .build();
-      } catch (final Exception e) {
-        logger.error(e.toString(), e);
-      }
+  }
+
+  private ActionResultModel copyResumeFromStaticAssets(
+          final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
+  ) {
+    final String resumeFileName = staticSiteRequestManager.websiteDetails.getResumeFile();
+    if (StringUtils.isBlank(resumeFileName)) {
+      logger.info("resumeFileName was blank, not copying");
+      return new ActionResultModel.Builder()
+              .setIsSuccessful(true)
+              .build();
     }
-    logger.error("Unable to download from S3 after 3 attempts, aborting");
+    final String outputLocation = getFilePath(
+            action.getOutputLocation(),
+            staticSiteRequestManager.resume.getUUID()
+    );
+    boolean successful = copyFileFromStaticAssets(resumeFileName, outputLocation);
     return new ActionResultModel.Builder()
-        .setIsSuccessful(false)
-        .build();
+            .setIsSuccessful(successful)
+            .build();
+  }
+
+  private ActionResultModel copyProfilePictureFromStaticAssets(
+          final ActionsModel action, final StaticSiteRequestModel staticSiteRequestManager
+  ) {
+    final String profilePictureFileName = staticSiteRequestManager.websiteDetails.getProfilePictureFile();
+    if (StringUtils.isBlank(profilePictureFileName)) {
+      logger.info("profilePictureFileName was blank, not copying");
+      return new ActionResultModel.Builder()
+              .setIsSuccessful(true)
+              .build();
+    }
+    final String outputLocation = getFilePath(
+            action.getOutputLocation(),
+            staticSiteRequestManager.resume.getUUID()
+    );
+    boolean successful = copyFileFromStaticAssets(profilePictureFileName, outputLocation);
+    return new ActionResultModel.Builder()
+            .setIsSuccessful(successful)
+            .build();
+  }
+
+  private boolean copyFileFromStaticAssets(final String inputFileName, final String outputFileLocation) {
+    if (staticAssetsDirectory == null) {
+      logger.error("staticAssetsDirectory not configured, not able to copy from static assets");
+      return true;
+    }
+    final Path inputFilePath = Paths.get(staticAssetsDirectory, inputFileName);
+    final Path outputFilePath = Paths.get(outputFileLocation);
+    return copyFile(inputFilePath, outputFilePath);
+  }
+
+
+  private boolean copyFile(final Path inputPath, final Path outputPath) {
+    if (!ioFactory.exists(inputPath)) {
+      logger.error(String.format("Input file %s not found, ignoring and continuing", inputPath));
+      return true;
+    }
+    try {
+      ioFactory.copyFile(inputPath.toFile(), outputPath.toFile());
+      return true;
+    } catch (final IOException e) {
+      logger.error(String.format("Error trying to copy file %s to %s, ignoring and continuing", inputPath, outputPath));
+      return false;
+    }
   }
 
   private File getFileFromFilePathString(final String filePath) {
@@ -203,5 +192,21 @@ public class ActionProcessor implements IActionProcessor {
       logger.error(errorMessage, e);
       throw new PortfolioGenerationFailedException(errorMessage, e);
     }
+  }
+
+  public String getResourceOutputRoot() {
+    return resourceOutputRoot;
+  }
+
+  public void setResourceOutputRoot(String resourceOutputRoot) {
+    this.resourceOutputRoot = resourceOutputRoot;
+  }
+
+  public String getStaticAssetsDirectory() {
+    return staticAssetsDirectory;
+  }
+
+  public void setStaticAssetsDirectory(String staticAssetsDirectory) {
+    this.staticAssetsDirectory = staticAssetsDirectory;
   }
 }

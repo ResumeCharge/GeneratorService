@@ -9,8 +9,8 @@ public class WebsiteDetailsModel {
   private String title;
   private String description;
   private String templateName;
-  private String resumeS3URI;
-  private String profilePictureS3URI;
+  private String resumeFile;
+  private String profilePictureFile;
   private String websiteIdentifier;
   private String resumeName;
   private Map<String, String> extraConfigurationOptions = new HashMap<>();
@@ -39,20 +39,20 @@ public class WebsiteDetailsModel {
     this.templateName = templateName;
   }
 
-  public String getResumeS3URI() {
-    return resumeS3URI;
+  public String getResumeFile() {
+    return resumeFile;
   }
 
-  public void setResumeS3URI(final String resumeS3URI) {
-    this.resumeS3URI = resumeS3URI;
+  public void setResumeFile(final String resumeFile) {
+    this.resumeFile = resumeFile;
   }
 
-  public String getProfilePictureS3URI() {
-    return profilePictureS3URI;
+  public String getProfilePictureFile() {
+    return profilePictureFile;
   }
 
-  public void setProfilePictureS3URI(final String profilePictureS3URI) {
-    this.profilePictureS3URI = profilePictureS3URI;
+  public void setProfilePictureFile(final String profilePictureFile) {
+    this.profilePictureFile = profilePictureFile;
   }
 
   public Map<String, String> getExtraConfigurationOptions() {

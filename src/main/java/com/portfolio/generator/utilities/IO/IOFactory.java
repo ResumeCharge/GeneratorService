@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -33,4 +34,13 @@ public class IOFactory implements IIOFactory {
     FileUtils.copyDirectory(inputDirectory, outputDirectory);
   }
 
+  @Override
+  public void copyFile(File inputFile, File outputFile) throws IOException {
+    FileUtils.copyFile(inputFile, outputFile);
+  }
+
+  @Override
+  public boolean exists(Path inputFilePath) {
+    return Files.exists(inputFilePath);
+  }
 }

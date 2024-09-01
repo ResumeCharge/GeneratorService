@@ -10,23 +10,20 @@ import com.portfolio.generator.utilities.IO.IIOFactory;
 import com.portfolio.generator.utilities.aws.factories.IAWSClientFactory;
 import com.portfolio.generator.utilities.aws.factories.S3ObjectFactory;
 import com.portfolio.generator.utilities.exceptions.ActionProcessingFailedException;
-import com.portfolio.generator.utilities.exceptions.PortfolioGenerationFailedException;
 import com.portfolio.generator.utilities.helpers.s3.IS3BucketHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,22 +32,18 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ActionProcessorTest {
+  // Define the Environment as a Mockito mock object
   @Mock
-  private S3ObjectFactory s3ObjectFactory;
-  @Mock
-  private IS3BucketHelper s3BucketHelper;
+  Environment env;
   @Mock
   private IIOFactory ioFactory;
   @Mock
-  private IAWSClientFactory awsClientFactory;
-  @Mock
   private ResourceLoader resourceLoader;
-  private IActionProcessor actionProcessor;
-
+  private ActionProcessor actionProcessor;
 
   @BeforeEach
   public void setUp() {
-    actionProcessor = new ActionProcessor(s3BucketHelper, s3ObjectFactory, ioFactory, awsClientFactory, resourceLoader);
+    actionProcessor = new ActionProcessor(ioFactory, resourceLoader);
   }
 
   @Test
@@ -100,97 +93,118 @@ class ActionProcessorTest {
   }
 
   @Test
-  public void testDownloadResumeFromS3() throws ActionProcessingFailedException {
-    final AmazonS3URI amazonS3URI = new AmazonS3URI("s3://test-bucket");
+  public void testCopyResumeFromStaticAssets() throws ActionProcessingFailedException, IOException {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("uuid");
-    websiteDetailsModel.setResumeS3URI("uri");
+    websiteDetailsModel.setResumeFile("some-resume.pdf");
     final ActionsModel action = new ActionsModel();
-    action.setActionType(ActionType.DOWNLOAD_RESUME_FROM_S3);
-    action.setOutputLocation("out");
+    action.setActionType(ActionType.COPY_RESUME_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/resume.pdf");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
         .setWebsiteDetails(websiteDetailsModel)
         .setResume(resumeModel)
         .build();
-    when(s3ObjectFactory.getAmazonS3URI(anyString())).thenReturn(amazonS3URI);
-    s3BucketHelper.downloadFromS3Bucket(any(AmazonS3.class), anyString(), any(Path.class));
+    when(ioFactory.exists(any(Path.class))).thenReturn(true);
+    actionProcessor.setStaticAssetsDirectory("static-sites");
     final ActionResultModel actionResult = actionProcessor.processAction(action, request);
+    verify(ioFactory).copyFile(any(File.class), any(File.class));
     assertTrue(actionResult.getIsSuccessful());
   }
 
   @Test
-  public void testDownloadResumeFromException() throws ActionProcessingFailedException {
-    final AmazonS3URI amazonS3URI = new AmazonS3URI("s3://test-bucket");
+  public void testCopyResumeFromStaticAssetsException() throws ActionProcessingFailedException, IOException {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("uuid");
-    websiteDetailsModel.setResumeS3URI("uri");
+    websiteDetailsModel.setResumeFile("some-resume.pdf");
     final ActionsModel action = new ActionsModel();
-    action.setActionType(ActionType.DOWNLOAD_RESUME_FROM_S3);
-    action.setOutputLocation("out");
+    action.setActionType(ActionType.COPY_RESUME_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/resume.pdf");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
             .setWebsiteDetails(websiteDetailsModel)
             .setResume(resumeModel)
             .build();
-    when(s3ObjectFactory.getAmazonS3URI(anyString())).thenReturn(amazonS3URI);
-    doThrow(new RuntimeException()).when(s3BucketHelper).downloadFromS3Bucket(any(AmazonS3.class), anyString(), any(Path.class));
+    when(ioFactory.exists(any(Path.class))).thenReturn(true);
+    doThrow(new IOException()).when(ioFactory).copyFile(any(File.class), any(File.class));
+    actionProcessor.setStaticAssetsDirectory("static-sites");
     final ActionResultModel actionResult = actionProcessor.processAction(action, request);
     assertFalse(actionResult.getIsSuccessful());
   }
 
   @Test
-  public void testDownloadResumeFromS3BlankURI() throws ActionProcessingFailedException {
+  public void testCopyResumeEmptyResumeFileName() throws ActionProcessingFailedException, IOException {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("uuid");
-    websiteDetailsModel.setResumeS3URI("");
     final ActionsModel action = new ActionsModel();
-    action.setActionType(ActionType.DOWNLOAD_RESUME_FROM_S3);
-    action.setOutputLocation("out");
+    action.setActionType(ActionType.COPY_RESUME_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/resume.pdf");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
             .setWebsiteDetails(websiteDetailsModel)
             .setResume(resumeModel)
             .build();
+    actionProcessor.setStaticAssetsDirectory("static-sites");
     final ActionResultModel actionResult = actionProcessor.processAction(action, request);
+    verify(ioFactory, never()).copyFile(any(File.class), any(File.class));
     assertTrue(actionResult.getIsSuccessful());
   }
 
   @Test
-  public void testDownloadProfilePictureFromS3() throws ActionProcessingFailedException {
-    final AmazonS3URI amazonS3URI = new AmazonS3URI("s3://test-bucket");
+  public void testCopyProfilePictureFromStaticAssets() throws ActionProcessingFailedException, IOException {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("uuid");
-    websiteDetailsModel.setProfilePictureS3URI("uri");
+    websiteDetailsModel.setProfilePictureFile("some-profile-picture.jpeg");
     final ActionsModel action = new ActionsModel();
-    action.setActionType(ActionType.DOWNLOAD_PROFILE_PICTURE_FROM_S3);
-    action.setOutputLocation("out");
+    action.setActionType(ActionType.COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/profile-picture.jpeg");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
             .setWebsiteDetails(websiteDetailsModel)
             .setResume(resumeModel)
             .build();
-    when(s3ObjectFactory.getAmazonS3URI(anyString())).thenReturn(amazonS3URI);
-    s3BucketHelper.downloadFromS3Bucket(any(AmazonS3.class), anyString(), any(Path.class));
+    when(ioFactory.exists(any(Path.class))).thenReturn(true);
+    actionProcessor.setStaticAssetsDirectory("static-sites");
     final ActionResultModel actionResult = actionProcessor.processAction(action, request);
+    verify(ioFactory).copyFile(any(File.class), any(File.class));
     assertTrue(actionResult.getIsSuccessful());
   }
 
   @Test
-  public void testDownloadProfilePictureFromS3BlankURI() throws ActionProcessingFailedException {
-    final AmazonS3URI amazonS3URI = new AmazonS3URI("s3://test-bucket");
+  public void testCopyProfilePictureFromStaticAssetsException() throws ActionProcessingFailedException, IOException {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("uuid");
-    websiteDetailsModel.setProfilePictureS3URI("");
+    websiteDetailsModel.setProfilePictureFile("some-profile-picture.jpeg");
     final ActionsModel action = new ActionsModel();
-    action.setActionType(ActionType.DOWNLOAD_PROFILE_PICTURE_FROM_S3);
-    action.setOutputLocation("out");
+    action.setActionType(ActionType.COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/profile-picture.jpeg");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
             .setWebsiteDetails(websiteDetailsModel)
             .setResume(resumeModel)
             .build();
+    when(ioFactory.exists(any(Path.class))).thenReturn(true);
+    doThrow(new IOException()).when(ioFactory).copyFile(any(File.class), any(File.class));
+    actionProcessor.setStaticAssetsDirectory("static-sites");
     final ActionResultModel actionResult = actionProcessor.processAction(action, request);
+    assertFalse(actionResult.getIsSuccessful());
+  }
+
+  @Test
+  public void testCopyProfilePictureEmptyResumeFileName() throws ActionProcessingFailedException, IOException {
+    final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
+    final ResumeModel resumeModel = new ResumeModel();
+    resumeModel.setUUID("uuid");
+    final ActionsModel action = new ActionsModel();
+    action.setActionType(ActionType.COPY_PROFILE_PICTURE_FROM_STATIC_ASSETS);
+    action.setOutputLocation("out/profile-picture.jpeg");
+    final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
+            .setWebsiteDetails(websiteDetailsModel)
+            .setResume(resumeModel)
+            .build();
+    actionProcessor.setStaticAssetsDirectory("static-sites");
+    final ActionResultModel actionResult = actionProcessor.processAction(action, request);
+    verify(ioFactory, never()).copyFile(any(File.class), any(File.class));
     assertTrue(actionResult.getIsSuccessful());
   }
 

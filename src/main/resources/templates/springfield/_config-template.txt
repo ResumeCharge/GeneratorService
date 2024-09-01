@@ -9,7 +9,7 @@ sass:
   style: compressed
 
 # Resume settings
-resume_avatar:                  [# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI}"]"true"[/][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI == null}"]"false"[/]
+resume_avatar:                  [# th:if="${staticSiteRequestManager.websiteDetails.profilePictureFile}"]"true"[/][# th:if="${staticSiteRequestManager.websiteDetails.profilePictureS3URI == null}"]"false"[/]
 resume_name:                    "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.firstName)})] [(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.lastName)})]"
 resume_title:                   "[(${#strings.escapeJava(staticSiteRequestManager.resume.personalDetails.positionTitle)})]"
 
