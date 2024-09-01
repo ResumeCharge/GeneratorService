@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty scope="context" name="logLocation" source="log.location"
+    <springProperty scope="context" name="logLocation" source="LOG_LOCATION"
                     defaultValue="./logs"/>
     <property name="LOGS" value="${logLocation}"/>
     <appender name="Console"

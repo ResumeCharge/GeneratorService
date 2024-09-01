@@ -1,6 +1,6 @@
 package com.portfolio.generator.processors;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3URI;
@@ -45,7 +45,7 @@ public class ActionProcessor implements IActionProcessor {
   private final IAWSClientFactory awsClientFactory;
   private final ResourceLoader resourceLoader;
 
-  @Value("${resources.output.root}")
+  @Value("${RESOURCES_OUTPUT_ROOT}")
   private String resourceOutputRoot;
 
   public ActionProcessor(final IS3BucketHelper s3BucketHelper,
@@ -163,8 +163,8 @@ public class ActionProcessor implements IActionProcessor {
   private ActionResultModel downloadFromS3(
       final String amazonS3URIAsString, final String outputLocation
   ) {
-    final ProfileCredentialsProvider profileCredentialsProvider = new ProfileCredentialsProvider("generator-service");
-    final AmazonS3 s3Client = awsClientFactory.getS3Client(profileCredentialsProvider, Regions.US_EAST_1);
+    final DefaultAWSCredentialsProviderChain credentialsProvider = new DefaultAWSCredentialsProviderChain();
+    final AmazonS3 s3Client = awsClientFactory.getS3Client(credentialsProvider, Regions.US_EAST_1);
     for (int retry = 0; retry < 3; retry++) {
       try {
         final AmazonS3URI objectUri = S3ObjectFactory.getAmazonS3URI(amazonS3URIAsString);

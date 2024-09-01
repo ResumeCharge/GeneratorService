@@ -50,8 +50,6 @@ public class PendingDeploymentSweeperJob implements IJob {
   private final IDateTimeFactory dateTimeFactory;
   private final IDeploymentStatusHelper deploymentStatusHelper;
   private final IPendingDeploymentDeployActionProcessor deploymentStatusPollerScheduler;
-  @Value("${DEPLOYMENT_URL_PREFIX}")
-  private String deploymentUrlPrefix;
 
 
   public PendingDeploymentSweeperJob(

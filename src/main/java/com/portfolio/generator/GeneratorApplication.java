@@ -18,6 +18,6 @@ public class GeneratorApplication extends SpringBootServletInitializer {
     return application.sources(applicationClass);
   }
 
-  private static Class<GeneratorApplication> applicationClass = GeneratorApplication.class;
+  private static final Class<GeneratorApplication> applicationClass = GeneratorApplication.class;
 
 }

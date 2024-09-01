@@ -1,4 +1,4 @@
-package com.portfolio.generator.controllers;
+package com.portfolio.generator.controller;
 
 
 import com.portfolio.generator.models.GenerateStaticSiteRequestModel;

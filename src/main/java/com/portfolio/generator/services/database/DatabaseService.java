@@ -29,7 +29,7 @@ import static com.mongodb.client.model.Filters.eq;
 @Component
 public class DatabaseService implements IDatabaseService {
   private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
-  private static final String DATABASE = "test";
+  private static final String DATABASE = "development";
   private static final String DEPLOYMENTS_COLLECTION = "deployments";
   private static final String RESUMES_COLLECTION = "resumes";
   private static final String PENDING_DEPLOYMENT_COLLECTIONS = "pendingdeployments";

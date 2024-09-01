@@ -52,7 +52,7 @@ public class PortfolioGeneratorService implements IPortfolioGeneratorService {
   private final StaticSiteRequestManagerHelper resumeManagerHelper;
   private final DeploymentStatusHelper deploymentStatusHelper;
   private final IResourceHelper resourceHelper;
-  @Value("${resources.output.root}")
+  @Value("${RESOURCES_OUTPUT_ROOT}")
   private String resourceOutputRoot;
 
   public PortfolioGeneratorService(
