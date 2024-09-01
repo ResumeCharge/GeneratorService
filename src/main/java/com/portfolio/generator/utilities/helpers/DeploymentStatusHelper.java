@@ -22,8 +22,10 @@ import java.util.Map;
 
 @Component
 public class DeploymentStatusHelper implements IDeploymentStatusHelper {
-  @Value("${DEPLOYMENT_SERVICE_PORT}")
+  @Value("${DEPLOYMENT_SERVICE_PORT:3001}")
   private String deploymentServicePort;
+  @Value("${DEPLOYMENT_SERVICE_HOST:localhost}")
+  private String deploymentServiceHost;
   private static final String UPDATE_DEPLOYMENT_STATUS_MSG =
       "Updating deployment status. Request: %s";
   private static final String UPDATE_DEPLOYMENT_STATUS_ERR_MSG =
@@ -62,7 +64,7 @@ public class DeploymentStatusHelper implements IDeploymentStatusHelper {
       throws UnsupportedEncodingException, JsonProcessingException {
     final Map<String, Object> body = getRequestBody(deploymentStatus);
     final HttpPatch request =
-        new HttpPatch(String.format("http://localhost:%s/api/deployments/%s", deploymentServicePort, deploymentStatus.getDeploymentId()));
+        new HttpPatch(String.format("http://%s:%s/api/deployments/%s",deploymentServiceHost, deploymentServicePort, deploymentStatus.getDeploymentId()));
     request.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
     final String bodyAsJson = new ObjectMapper().writeValueAsString(body);
     final StringEntity requestEntity = new StringEntity(bodyAsJson);
@@ -92,4 +94,19 @@ public class DeploymentStatusHelper implements IDeploymentStatusHelper {
     closeableHttpClient.close();
   }
 
+  public String getDeploymentServicePort() {
+    return deploymentServicePort;
+  }
+
+  public void setDeploymentServicePort(String deploymentServicePort) {
+    this.deploymentServicePort = deploymentServicePort;
+  }
+
+  public String getDeploymentServiceHost() {
+    return deploymentServiceHost;
+  }
+
+  public void setDeploymentServiceHost(String deploymentServiceHost) {
+    this.deploymentServiceHost = deploymentServiceHost;
+  }
 }

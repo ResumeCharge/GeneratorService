@@ -16,8 +16,10 @@ import java.util.Optional;
 
 @Component
 public class UserService implements IUserService {
-  @Value("${USER_SERVICE_PORT}")
+  @Value("${USER_SERVICE_PORT:3002}")
   private String userServicePort;
+  @Value("${USER_SERVICE_HOST:localhost}")
+  private String userServiceHost;
   private final CloseableHttpClient client;
   private final IHttpUtils httpUtils;
 
@@ -65,7 +67,7 @@ public class UserService implements IUserService {
   }
 
   private String getUserServicePath(final Optional<String> endpoint) {
-    String userServiceEndpoint = String.format("http://localhost:%s/api", userServicePort);
+    String userServiceEndpoint = String.format("http://%s:%s/api", userServiceHost, userServicePort);
     if (endpoint.isPresent()) {
       userServiceEndpoint = userServiceEndpoint + endpoint.get();
     }
@@ -78,5 +80,13 @@ public class UserService implements IUserService {
 
   public void setUserServicePort(String userServicePort) {
     this.userServicePort = userServicePort;
+  }
+
+  public String getUserServiceHost() {
+    return userServiceHost;
+  }
+
+  public void setUserServiceHost(String userServiceHost) {
+    this.userServiceHost = userServiceHost;
   }
 }

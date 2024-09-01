@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DeploymentService implements IDeploymentService {
-  @Value("${DEPLOYMENT_SERVICE_PORT}")
+  @Value("${DEPLOYMENT_SERVICE_PORT:3001}")
   private String deploymentServicePort;
+  @Value("${DEPLOYMENT_SERVICE_HOST:localhost}")
+  private String deploymentServiceHost;
   private final CloseableHttpClient client;
 
   public DeploymentService(final CloseableHttpClient client) {
@@ -20,7 +22,7 @@ public class DeploymentService implements IDeploymentService {
 
   @Override
   public Boolean healthCheckDeploymentService() {
-    final HttpGet request = new HttpGet(String.format("http://localhost:%s/api", deploymentServicePort));
+    final HttpGet request = new HttpGet(String.format("http://%s:%s/api", deploymentServiceHost, deploymentServicePort));
     request.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
     try (final CloseableHttpResponse response = client.execute(request)) {
       final int status = response.getStatusLine().getStatusCode();
@@ -36,5 +38,13 @@ public class DeploymentService implements IDeploymentService {
 
   public void setDeploymentServicePort(String deploymentServicePort) {
     this.deploymentServicePort = deploymentServicePort;
+  }
+
+  public String getDeploymentServiceHost() {
+    return deploymentServiceHost;
+  }
+
+  public void setDeploymentServiceHost(String deploymentServiceHost) {
+    this.deploymentServiceHost = deploymentServiceHost;
   }
 }
