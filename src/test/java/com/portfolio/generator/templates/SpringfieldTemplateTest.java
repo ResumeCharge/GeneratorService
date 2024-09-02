@@ -9,7 +9,6 @@ import com.portfolio.generator.models.staticsite.StaticSiteRequestModel;
 import com.portfolio.generator.processors.IActionProcessor;
 import com.portfolio.generator.processors.IOptionsProcessor;
 import com.portfolio.generator.processors.ITemplateProcessor;
-import com.portfolio.generator.services.IPortfolioGeneratorService;
 import com.portfolio.generator.services.PortfolioGeneratorService;
 import com.portfolio.generator.services.staticsites.github.IGitHubService;
 import com.portfolio.generator.utilities.IO.IOFactory;
@@ -17,16 +16,12 @@ import com.portfolio.generator.utilities.exceptions.ActionProcessingFailedExcept
 import com.portfolio.generator.utilities.exceptions.PortfolioGenerationFailedException;
 import com.portfolio.generator.utilities.exceptions.TemplateProcessingFailedException;
 import com.portfolio.generator.utilities.helpers.DeploymentStatusHelper;
-import com.portfolio.generator.utilities.helpers.IResourceHelper;
-import com.portfolio.generator.utilities.helpers.ResourceHelper;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -48,20 +43,17 @@ class SpringfieldTemplateTest {
   private IGitHubService gitHubServiceMock;
   @Mock
   private DeploymentStatusHelper deploymentStatusHelperMock;
-  private IResourceHelper resourceHelper;
-
-  private IPortfolioGeneratorService portfolioGeneratorService;
+  private PortfolioGeneratorService portfolioGeneratorService;
 
   @BeforeEach
   void setUp() {
     final IOFactory ioFactory = new IOFactory();
-    final ResourceLoader resourceLoader = new DefaultResourceLoader();
-    resourceHelper = new ResourceHelper(resourceLoader, ioFactory);
+
     portfolioGeneratorService =
-        new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
-            optionsProcessorMock, gitHubServiceMock,
-            deploymentStatusHelperMock, resourceHelper
-        );
+            new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
+                    optionsProcessorMock, gitHubServiceMock,
+                    deploymentStatusHelperMock, ioFactory
+            );
   }
 
 
@@ -158,6 +150,7 @@ class SpringfieldTemplateTest {
         .setDeploymentProvider(DeploymentProvider.GITHUB)
         .setWebsiteDetails(websiteDetails)
         .build();
+    portfolioGeneratorService.setStaticAssetsLocation("./assets");
     portfolioGeneratorService.generatePortfolio(request);
     verify(gitHubServiceMock, times(1)).deployNewGitHubPagesWebsite(any(PortfolioGenerationTask.class));
     verify(deploymentStatusHelperMock, times(4)).updateDeploymentProgress(any());

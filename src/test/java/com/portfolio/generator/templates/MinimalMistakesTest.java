@@ -48,18 +48,17 @@ class MinimalMistakesTest {
   @Mock
   private DeploymentStatusHelper deploymentStatusHelperMock;
 
-  private IPortfolioGeneratorService portfolioGeneratorService;
+  private PortfolioGeneratorService portfolioGeneratorService;
 
   @BeforeEach
   void setUp() {
     final IOFactory ioFactory = new IOFactory();
-    final ResourceLoader resourceLoader = new DefaultResourceLoader();
-    IResourceHelper resourceHelper = new ResourceHelper(resourceLoader, ioFactory);
+
     portfolioGeneratorService =
-        new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
-            optionsProcessorMock, gitHubServiceMock,
-            deploymentStatusHelperMock, resourceHelper
-        );
+            new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
+                    optionsProcessorMock, gitHubServiceMock,
+                    deploymentStatusHelperMock, ioFactory
+            );
   }
 
   @Test
@@ -153,6 +152,7 @@ class MinimalMistakesTest {
         .setDeploymentProvider(DeploymentProvider.GITHUB)
         .setWebsiteDetails(websiteDetails)
         .build();
+    portfolioGeneratorService.setStaticAssetsLocation("./assets");
     portfolioGeneratorService.generatePortfolio(request);
     verify(gitHubServiceMock, times(1))
         .deployNewGitHubPagesWebsite(any());

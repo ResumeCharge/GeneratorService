@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 class PortfolioGeneratorServiceTest {
   private static final Logger log = LoggerFactory.getLogger(PortfolioGeneratorServiceTest.class);
   private static final Path testDirectory =
-      Paths.get("out", "test-artifacts", "generated-templates");
+          Paths.get("out", "test-artifacts", "generated-templates");
   @Mock
   private ITemplateProcessor templateProcessor;
   @Mock
@@ -57,6 +57,8 @@ class PortfolioGeneratorServiceTest {
   private IGitHubService gitHubService;
   @Mock
   private DeploymentStatusHelper deploymentStatusHelper;
+  @Mock
+  private IOFactory ioFactory;
   private PortfolioGeneratorService portfolioGeneratorService;
 
   @BeforeAll
@@ -86,20 +88,21 @@ class PortfolioGeneratorServiceTest {
     final ResourceLoader resourceLoader = new DefaultResourceLoader();
     IResourceHelper resourceHelper = new ResourceHelper(resourceLoader, ioFactory);
     this.portfolioGeneratorService =
-        new PortfolioGeneratorService(
-            templateProcessor,
-            actionProcessor,
-            optionsProcessor,
-            gitHubService,
-            deploymentStatusHelper,
-            resourceHelper);
+            new PortfolioGeneratorService(
+                    templateProcessor,
+                    actionProcessor,
+                    optionsProcessor,
+                    gitHubService,
+                    deploymentStatusHelper,
+                    ioFactory);
   }
 
   @Test
   void getActionsFromFile() throws IOException {
+    portfolioGeneratorService.setStaticAssetsLocation("./assets");
     final String portfolioType = "alembic";
     final List<ActionsModel> actionsModel =
-        portfolioGeneratorService.getActionsFromFile(portfolioType);
+            portfolioGeneratorService.getActionsFromFile(portfolioType);
     assertThat(actionsModel.size(), is(8));
   }
 
@@ -115,8 +118,8 @@ class PortfolioGeneratorServiceTest {
 
   @Test
   void testProcessActionsFromArray()
-      throws ActionProcessingFailedException, GitAPIException, TemplateProcessingFailedException,
-      URISyntaxException, IOException, PortfolioGenerationFailedException, InterruptedException {
+          throws ActionProcessingFailedException, GitAPIException, TemplateProcessingFailedException,
+          URISyntaxException, IOException, PortfolioGenerationFailedException, InterruptedException {
 
     final ActionsModel action = new ActionsModel();
     action.setActionType(ActionType.PROCESS_TEMPLATE_FROM_ARRAY);
@@ -132,40 +135,41 @@ class PortfolioGeneratorServiceTest {
     final List<ActionsModel> actionsList = new ArrayList<>();
     actionsList.add(action);
     final WorkExperienceModel workExperienceModel = new WorkExperienceModel(
-        "Junior Software Engineer",
-        "Telepin",
-        "Ottawa, ON",
-        "January 2019",
-        "April 2019",
-        "Did some stuff with money"
+            "Junior Software Engineer",
+            "Telepin",
+            "Ottawa, ON",
+            "January 2019",
+            "April 2019",
+            "Did some stuff with money"
     );
     final List<WorkExperienceModel> workExperienceModelList = new ArrayList<>();
     workExperienceModelList.add(workExperienceModel);
     final ResumeModel resume = new ResumeModel();
     resume.setWorkExperienceList(workExperienceModelList);
     final StaticSiteRequestModel request = new StaticSiteRequestModel
-        .Builder()
-        .setResume(resume)
-        .build();
+            .Builder()
+            .setResume(resume)
+            .build();
     when(optionsProcessor.isValid(eq(option), any(StaticSiteRequestModel.class))).thenReturn(true);
     portfolioGeneratorService.processActions(actionsList, request);
   }
 
   @Test
   void testGeneratePortfolioGithub()
-      throws PortfolioGenerationFailedException, IOException, GitAPIException, URISyntaxException, InterruptedException {
+          throws PortfolioGenerationFailedException, IOException, GitAPIException, URISyntaxException, InterruptedException {
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("UUID");
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     websiteDetailsModel.setTemplateName("alembic");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
-        .setDeploymentProvider(DeploymentProvider.GITHUB)
-        .setUserId("userId")
-        .setResume(resumeModel)
-        .setoAuthToken("token")
-        .setDeploymentId("deploymentId")
-        .setWebsiteDetails(websiteDetailsModel)
-        .build();
+            .setDeploymentProvider(DeploymentProvider.GITHUB)
+            .setUserId("userId")
+            .setResume(resumeModel)
+            .setoAuthToken("token")
+            .setDeploymentId("deploymentId")
+            .setWebsiteDetails(websiteDetailsModel)
+            .build();
+    portfolioGeneratorService.setStaticAssetsLocation("./assets");
     portfolioGeneratorService.generatePortfolio(request);
     final ArgumentCaptor<DeploymentStatus> argumentCaptor = ArgumentCaptor.forClass(DeploymentStatus.class);
     verify(deploymentStatusHelper, times(4)).updateDeploymentProgress(argumentCaptor.capture());
@@ -178,12 +182,12 @@ class PortfolioGeneratorServiceTest {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     websiteDetailsModel.setTemplateName("fake-template");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
-        .setWebsiteDetails(websiteDetailsModel)
-        .setResume(resumeModel)
-        .setDeploymentProvider(DeploymentProvider.GITHUB)
-        .build();
+            .setWebsiteDetails(websiteDetailsModel)
+            .setResume(resumeModel)
+            .setDeploymentProvider(DeploymentProvider.GITHUB)
+            .build();
     final Exception exception = assertThrows(PortfolioGenerationFailedException.class,
-        () -> portfolioGeneratorService.generatePortfolio(request));
+            () -> portfolioGeneratorService.generatePortfolio(request));
     assertTrue(exception.getCause().getMessage().contains("fake-template is not a valid portfolio type"));
   }
 
@@ -193,11 +197,11 @@ class PortfolioGeneratorServiceTest {
     final WebsiteDetailsModel websiteDetailsModel = new WebsiteDetailsModel();
     websiteDetailsModel.setTemplateName("alembic");
     final StaticSiteRequestModel request = new StaticSiteRequestModel.Builder()
-        .setWebsiteDetails(websiteDetailsModel)
-        .setResume(resumeModel)
-        .build();
+            .setWebsiteDetails(websiteDetailsModel)
+            .setResume(resumeModel)
+            .build();
     final Exception exception = assertThrows(PortfolioGenerationFailedException.class,
-        () -> portfolioGeneratorService.generatePortfolio(request));
+            () -> portfolioGeneratorService.generatePortfolio(request));
     assertTrue(exception.getCause().getMessage().contains("DeploymentProvider was null"));
   }
 

@@ -5,19 +5,15 @@ import com.portfolio.generator.models.ActionsModel;
 import com.portfolio.generator.models.staticsite.StaticSiteRequestModel;
 import com.portfolio.generator.utilities.IO.IIOFactory;
 import com.portfolio.generator.utilities.exceptions.ActionProcessingFailedException;
-import com.portfolio.generator.utilities.exceptions.PortfolioGenerationFailedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -34,17 +30,18 @@ public class ActionProcessor implements IActionProcessor {
   private static final String ACTION_PROCESSING_EXCEPTION = "Unable to process action %s";
   private static final Logger logger = LoggerFactory.getLogger(ActionProcessor.class);
   private final IIOFactory ioFactory;
-  private final ResourceLoader resourceLoader;
 
   @Value("${RESOURCES_OUTPUT_ROOT}")
   private String resourceOutputRoot;
 
-  @Value("${STATIC_ASSETS_DIRECTORY}")
-  private String staticAssetsDirectory;
+  @Value("${USER_WEBSITE_ASSETS_LOCATION}")
+  private String userWebsiteAssetsLocation;
 
-  public ActionProcessor(final IIOFactory ioFactory, final ResourceLoader resourceLoader) {
+  @Value("${STATIC_ASSETS_LOCATION:./assets}")
+  private String staticAssetsLocation;
+
+  public ActionProcessor(final IIOFactory ioFactory) {
     this.ioFactory = ioFactory;
-    this.resourceLoader = resourceLoader;
   }
 
   @Override
@@ -94,15 +91,15 @@ public class ActionProcessor implements IActionProcessor {
   private ActionResultModel copyDirectory(
           final ActionsModel action, final StaticSiteRequestModel staticSiteRequest
   )
-          throws IOException, PortfolioGenerationFailedException {
-    final File inputDirectory = getDirectoryAsFileFromClasspath(action.getInputLocation());
+          throws IOException {
+    final Path inputDirectory = Paths.get(staticAssetsLocation, action.getInputLocation());
     final String outputDirectory = getFilePath(action.getOutputLocation(),
             staticSiteRequest.resume.getUUID()
     );
     Validate.notNull(inputDirectory);
     Validate.notBlank(outputDirectory);
     final File outputDirectoryFile = getFileFromFilePathString(outputDirectory);
-    ioFactory.copyDirectory(inputDirectory, outputDirectoryFile);
+    ioFactory.copyDirectory(inputDirectory.toFile(), outputDirectoryFile);
     return new ActionResultModel.Builder()
             .setIsSuccessful(true)
             .build();
@@ -122,7 +119,7 @@ public class ActionProcessor implements IActionProcessor {
             action.getOutputLocation(),
             staticSiteRequestManager.resume.getUUID()
     );
-    boolean successful = copyFileFromStaticAssets(resumeFileName, outputLocation);
+    boolean successful = copyFileFromUserWebsiteAssets(resumeFileName, outputLocation);
     return new ActionResultModel.Builder()
             .setIsSuccessful(successful)
             .build();
@@ -142,18 +139,18 @@ public class ActionProcessor implements IActionProcessor {
             action.getOutputLocation(),
             staticSiteRequestManager.resume.getUUID()
     );
-    boolean successful = copyFileFromStaticAssets(profilePictureFileName, outputLocation);
+    boolean successful = copyFileFromUserWebsiteAssets(profilePictureFileName, outputLocation);
     return new ActionResultModel.Builder()
             .setIsSuccessful(successful)
             .build();
   }
 
-  private boolean copyFileFromStaticAssets(final String inputFileName, final String outputFileLocation) {
-    if (staticAssetsDirectory == null) {
-      logger.error("staticAssetsDirectory not configured, not able to copy from static assets");
+  private boolean copyFileFromUserWebsiteAssets(final String inputFileName, final String outputFileLocation) {
+    if (userWebsiteAssetsLocation == null) {
+      logger.error("userWebsiteAssets directory not configured, not able to copy from static assets");
       return true;
     }
-    final Path inputFilePath = Paths.get(staticAssetsDirectory, inputFileName);
+    final Path inputFilePath = Paths.get(userWebsiteAssetsLocation, inputFileName);
     final Path outputFilePath = Paths.get(outputFileLocation);
     return copyFile(inputFilePath, outputFilePath);
   }
@@ -183,17 +180,6 @@ public class ActionProcessor implements IActionProcessor {
     return String.format(resourceOutputRoot + "/" + location, args);
   }
 
-  private File getDirectoryAsFileFromClasspath(final String resourcePath) throws PortfolioGenerationFailedException {
-    try {
-      final Resource resource = resourceLoader.getResource("classpath:" + resourcePath);
-      return resource.getFile();
-    } catch (IOException e) {
-      final String errorMessage = "Exception trying to get directory from classpath";
-      logger.error(errorMessage, e);
-      throw new PortfolioGenerationFailedException(errorMessage, e);
-    }
-  }
-
   public String getResourceOutputRoot() {
     return resourceOutputRoot;
   }
@@ -202,11 +188,19 @@ public class ActionProcessor implements IActionProcessor {
     this.resourceOutputRoot = resourceOutputRoot;
   }
 
-  public String getStaticAssetsDirectory() {
-    return staticAssetsDirectory;
+  public String getUserWebsiteAssetsLocation() {
+    return userWebsiteAssetsLocation;
   }
 
-  public void setStaticAssetsDirectory(String staticAssetsDirectory) {
-    this.staticAssetsDirectory = staticAssetsDirectory;
+  public void setUserWebsiteAssetsLocation(String userWebsiteAssetsLocation) {
+    this.userWebsiteAssetsLocation = userWebsiteAssetsLocation;
+  }
+
+  public String getStaticAssetsLocation() {
+    return staticAssetsLocation;
+  }
+
+  public void setStaticAssetsLocation(String staticAssetsLocation) {
+    this.staticAssetsLocation = staticAssetsLocation;
   }
 }

@@ -1,6 +1,8 @@
 package com.portfolio.generator.utilities.IO;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -10,9 +12,7 @@ import java.nio.file.Paths;
 
 @Component
 public class IOFactory implements IIOFactory {
-  public FileOutputStream getFileOutputStream(final File file) throws FileNotFoundException {
-    return new FileOutputStream(file);
-  }
+  private static final Logger LOGGER = LoggerFactory.getLogger(IOFactory.class);
 
   @Override
   public FileOutputStream createFileOutputStreamUsingFileUtils(File file) throws IOException {
@@ -35,12 +35,28 @@ public class IOFactory implements IIOFactory {
   }
 
   @Override
-  public void copyFile(File inputFile, File outputFile) throws IOException {
+  public void copyFile(final File inputFile,final File outputFile) throws IOException {
     FileUtils.copyFile(inputFile, outputFile);
   }
 
   @Override
-  public boolean exists(Path inputFilePath) {
+  public boolean exists(final Path inputFilePath) {
     return Files.exists(inputFilePath);
+  }
+
+  @Override
+  public String readFileAsString(final File inputFile) {
+    try (final InputStream inputStream = new FileInputStream(inputFile);
+         final BufferedReader reader = this.getBufferedReader(inputStream)) {
+      final StringBuilder content = new StringBuilder();
+      String line;
+      while ((line = reader.readLine()) != null) {
+        content.append(line).append("\n");
+      }
+      return content.toString();
+    } catch (IOException e) {
+      LOGGER.error("Encountered exception trying to get file as string", e);
+      return null;
+    }
   }
 }

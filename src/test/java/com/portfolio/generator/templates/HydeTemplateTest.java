@@ -48,19 +48,17 @@ class HydeTemplateTest {
   @Mock
   private DeploymentStatusHelper deploymentStatusHelperMock;
 
-  private IPortfolioGeneratorService portfolioGeneratorService;
-  private IResourceHelper resourceHelper;
+  private PortfolioGeneratorService portfolioGeneratorService;
 
   @BeforeEach
   void setUp() {
     final IOFactory ioFactory = new IOFactory();
-    final ResourceLoader resourceLoader = new DefaultResourceLoader();
-    resourceHelper = new ResourceHelper(resourceLoader, ioFactory);
+
     portfolioGeneratorService =
-        new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
-            optionsProcessorMock, gitHubServiceMock,
-            deploymentStatusHelperMock, resourceHelper
-        );
+            new PortfolioGeneratorService(templateProcessorMock, actionProcessorMock,
+                    optionsProcessorMock, gitHubServiceMock,
+                    deploymentStatusHelperMock, ioFactory
+            );
   }
 
   @Test
@@ -155,6 +153,7 @@ class HydeTemplateTest {
         .setWebsiteDetails(websiteDetails)
         .setDeploymentProvider(DeploymentProvider.GITHUB)
         .build();
+    portfolioGeneratorService.setStaticAssetsLocation("./assets");
     portfolioGeneratorService.generatePortfolio(request);
     verify(gitHubServiceMock, times(1)).deployNewGitHubPagesWebsite(any());
     verify(deploymentStatusHelperMock, times(4)).updateDeploymentProgress(any());
