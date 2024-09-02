@@ -196,16 +196,16 @@ class ActionProcessorTest {
 
   @Test
   public void testCopyDirectory() throws ActionProcessingFailedException, IOException {
+    actionProcessor.setStaticAssetsLocation("./assets");
     final ResumeModel resumeModel = new ResumeModel();
     resumeModel.setUUID("UUID");
     final StaticSiteRequestModel staticSiteRequest = new StaticSiteRequestModel.Builder().setResume(resumeModel).build();
     final Path mockPath = mock(Path.class);
     final File mockFile = mock(File.class);
-    final Resource mockResource = mock(Resource.class);
     final ActionsModel action = new ActionsModel();
     action.setActionType(ActionType.COPY_DIRECTORY);
     action.setInputLocation("/somepathinput");
-    action.setInputLocation("/somepathoutput");
+    action.setOutputLocation("/somepathoutput");
     when(ioFactory.getPath(anyString())).thenReturn(mockPath);
     when(mockPath.toFile()).thenReturn(mockFile);
     ioFactory.copyDirectory(any(File.class), any(File.class));
