@@ -38,31 +38,4 @@ This forces people without the technical knowledge, or time to fiddle with these
 
 <!-- GETTING STARTED -->
 ## Getting Started
-The instructions below are not detailed/complete at the moment, I am working to write a detailed guide for setting up
-this project if you want to spin up your own instance. If you are interested in developing or running ResumeCharge
-locally please reach-out to me at [adam@adamlawson.dev](mailto:adam@adamlawson.dev).
-
-### Prerequisites
-
-* Java 11
-* Maven
-* [DeploymentService](https://github.com/ResumeCharge/DeploymentService) deployed and running
-* [UserService](https://github.com/ResumeCharge/UserService) deployed and running
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/ResumeCharge/GeneratorService.git
-   ```
-2. Install Maven dependencies
-   ```sh
-   mvn install
-   ```
-3. Configure required parameters in src/main/resources/application.properties
-
-4. Setup AWS profile `generator-service`
-5. Run the generator service
-   ```sh
-   mvn spring-boot:run
-   ```
+# Follow the instructions in https://github.com/ResumeCharge/standalone. This will deploy the entire ResumeCharge stack using Docker.
